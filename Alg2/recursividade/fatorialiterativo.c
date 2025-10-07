@@ -6,10 +6,8 @@ int fatiterativo(int n) {
     while (i > 0)  {
         resultado *= i;
         i--;
-        if (i == 1)
-            printf("EU AMO A ISABELA\n");
-    }
     return resultado;
+}
 }
 
 int main() {
