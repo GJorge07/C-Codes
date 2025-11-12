@@ -11,9 +11,6 @@
 #include "lista.h"
 
 // seus #defines vão aqui
-#define 
-#define 
-#define 
 
 // minimize o uso de variáveis globais
 
