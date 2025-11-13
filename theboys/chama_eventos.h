@@ -1,10 +1,10 @@
-//Protótipos da chamada eventos (conjunto de ações que serão realizadas no mundo)
+//Protótipo da chamada do loop dos eventos (conjunto de ações que serão realizadas no mundo)
 
 #ifndef CHAMA_EVENTOS_H
 #define CHAMA_EVENTOS_H
 
 #include "entidades.h"
-#include "lista.h"            //é lista ou fila?
+#include "lista.h"           
 #include "fprio.h"
 #include "conjunto.h"
 

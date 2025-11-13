@@ -1,3 +1,5 @@
+//Implementação do loop principal da simulação -> pega o evento, lê o tiṕo, chama a função e repete até acabar (FIM)
+
 //includes
 
 void lef(struct mundo_t *mundo) {

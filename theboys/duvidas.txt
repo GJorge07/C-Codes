@@ -1,2 +1,27 @@
 1. onde vai o eventos iniciais (6) ?
 2. Oq são as mensagens de depuração no final da 7.9
+
+
+
+theboys.c
+  inicia_mundo.c/h     → cria mundo
+  eventos.c/h          → define comportamento dos eventos
+  chama_eventos.c/h    → executa os eventos na ordem
+  fprio.c/h            → gerencia a LEF (fila de prioridade)
+  fila.c/h             → gerencia filas de espera
+  conjunto.h           → gerencia conjuntos de habilidades
+  destroi_mundo.c/h    → libera memória
+  outras_funcoes.c/h   → funções auxiliares
+  entidades.c/h        → define heróis, bases, missões e mundo
+
+
+
+
+
+
+1 -inicialização;
+2- eventos iniciais (6);
+3- destroi_mundo
+4 -chama_eventos
+5- eventos
+6- outras_funcoes

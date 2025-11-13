@@ -9,7 +9,8 @@ struct fpnodo_t
   struct fpnodo_t *prox;    // próximo nodo
 };
 
-// descreve uma fila de prioridades
+// descreve uma fila de prioridades, usada em eventos ESPERA e AVISA
+//USADA PRA IMPLEMENTAR A LEF
 struct fprio_t
 {
   struct fpnodo_t *prim ;   // primeiro nodo da fila
