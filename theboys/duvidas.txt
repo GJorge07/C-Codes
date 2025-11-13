@@ -1,0 +1,2 @@
+1. onde vai o eventos iniciais (6) ?
+2. Oq são as mensagens de depuração no final da 7.9
