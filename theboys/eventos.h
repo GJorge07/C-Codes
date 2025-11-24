@@ -74,6 +74,7 @@ struct viaja {
     int tempo;
     int heroi;
     int base;
+    int destino;
 
 };
 
@@ -82,10 +83,11 @@ struct morre {
     int tempo;
     int heroi;
     int base;
+    int missao;
 
 };
 
-struct missao {
+struct missao_ev {
 
     int tempo;
     int missao;
@@ -95,6 +97,17 @@ struct missao {
 struct fim {
 
     int tempo;
+
+};
+
+struct evento_t {
+
+    int tempo;
+    int heroi;
+    int tipo;
+    int base;
+    int destino;
+    int missao;
 
 };
 

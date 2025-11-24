@@ -8,6 +8,6 @@
 #include "fprio.h"
 #include "conjunto.h"
 
-struct mundo_t *inicia_mundo();        /*mundo_t declarado em entidades*/
+mundo_t *inicia_mundo();        /*mundo_t declarado em entidades*/
 
 #endif

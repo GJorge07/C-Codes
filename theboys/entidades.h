@@ -8,6 +8,8 @@
 #include "conjunto.h"
 #include <math.h>
 #include "fila.h"                 //nn tenho ctz de quais precisa ou n
+#include "fprio.h"
+#include "lista.h"
 
 
 struct localizacao {
@@ -63,6 +65,7 @@ struct mundo {
 
     int relogio;
 
+    struct fprio_t *lef;          //pra usar nos eventos iniciais, chama_eventos e destroi_mundo
 };
 
 typedef struct localizacao localizacao_t;

@@ -20,6 +20,6 @@
 #define FIM 10
 
 //Protótipo da lista de eventos futuros, que agenda e processa eventos do mundo ao longo do tempo
-void lef(struct mundo_t *mundo);
+void lef(mundo_t *mundo);
 
 #endif

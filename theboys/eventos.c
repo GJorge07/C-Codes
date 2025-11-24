@@ -7,25 +7,112 @@
 #include "eventos.h"
 
 //defines
+#define T_FIM_DO_MUNDO 525600
 
-void eventos_iniciais(mundo_t *mundo);
+void eventos_iniciais(mundo_t *mundo) {
 
-void evento_chega(mundo_t *mundo, struct chega *chega);
+    mundo->lef = fprio_cria();   // cria a fila de prioridade da lista de eventos futuros
 
-void evento_espera(mundo_t *mundo, struct espera *espera);
+    for (int i = 0; i < mundo->nherois; i++) {      //percorre todos os herois do mundo
 
-void evento_desiste(mundo_t *mundo, struct desiste *desiste);
+        // cria o evento e insere heroi
+        struct evento_t *ev = malloc(sizeof(struct evento_t));            //nn fiz typedef desse
 
-void evento_avisa(mundo_t *mundo, struct avisa *avisa);
+        ev->tipo = CHEGA;
+        ev->tempo = aleat(0, 4320);
+        ev->heroi = i;                      //qual heroi chega em uma base aleat em um tempo aleat
+        ev->base = aleat(0, mundo->nbases - 1);
 
-void evento_entra(mundo_t *mundo, struct entra *entra);
+        
+        mundo->herois[i]->base_atual = ev->base;            //att base atual do heroi antes da simulação começar
 
-void evento_sai(mundo_t *mundo, struct sai *sai);
+        // lista(lef), item(ev), tipo(chega), prio(ev->tempo)
+        fprio_insere(mundo->lef, ev, CHEGA, ev->tempo);
+    }
 
-void evento_viaja(mundo_t *mundo, struct viaja *viaja);
+    //insere missoes na lef
+    for (int i=0; i < mundo->nmissoes; i++) {
 
-void evento_morre(mundo_t *mundo, struct morre *morre);
+        struct evento_t *ev = malloc(sizeof(struct evento_t));
 
-void evento_missao(mundo_t *mundo, struct missao *missao);
+        ev->tipo = MISSAO;
+        ev->tempo = aleat(0,T_FIM_DO_MUNDO);            //cada missao m ocorre em um tempo aleat
+        ev->missao = i;
 
-void evento_fim(mundo_t *mundo, struct fim *fim);
+        // lista(lef), item(ev), tipo(missao), prio(ev->tempo)
+        fprio_insere(mundo->lef, ev, MISSAO, ev->tempo);
+    }
+
+    //insere fim na lef, serve p finalizar a simulação
+     struct evento_t *ev = malloc(sizeof(struct evento_t));
+
+     ev->tempo = T_FIM_DO_MUNDO;
+     ev->tipo = FIM;
+
+     fprio_insere(mundo->lef,ev,FIM,ev->tempo);
+
+    //Quando o tempo chegar em 525.600, acabou a simulação.
+}
+
+void evento_chega(mundo_t *mundo, struct chega *chega) {
+
+    struct espera *esp;
+
+    if (!mundo || !chega)
+        return;
+
+    if (!)     //se heroi tiver morto, return
+        return;
+
+    mundo->herois[chega->heroi]->base_atual = chega->base;
+
+
+    if (base->lotacao > 0 && base->fila_t == 0)
+        esp = 1;
+    else
+        esp = heroi->paciencia > (10 * base->lotacao (em b));
+
+    if esp {
+        fprio_insere(mundo->lef,x,ESPERA,y);
+        return;
+    }
+
+    fprio_insere(mundo->lef,x,DESISTE,y);
+
+}
+
+void evento_espera(mundo_t *mundo, struct espera *espera) {
+
+}
+
+void evento_desiste(mundo_t *mundo, struct desiste *desiste) {
+
+}
+
+void evento_avisa(mundo_t *mundo, struct avisa *avisa) {
+
+}
+
+void evento_entra(mundo_t *mundo, struct entra *entra) {
+
+}
+
+void evento_sai(mundo_t *mundo, struct sai *sai) {
+
+}
+
+void evento_viaja(mundo_t *mundo, struct viaja *viaja) {
+
+}
+
+void evento_morre(mundo_t *mundo, struct morre *morre) {
+
+}
+
+void evento_missao(mundo_t *mundo, struct missao *missao) {
+
+}
+
+void evento_fim(mundo_t *mundo, struct fim *fim) {
+    
+}
