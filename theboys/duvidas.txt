@@ -5,6 +5,10 @@
 5.colocar prints nos eventos!!!
 6.como coloca heroi removido, distancia e duração nos prints
 7.identar - principalmente os printf, deixar td na msm linha
+8.falta o viaja e o chega e o missao e o morre
+9.ver os comentarios com duvidas em cada evento
+10.fazer os crias e terminas eventos, deixar só missao e fim.
+11. colocar certinho os print e os crias nos eventos.
 
 theboys.c
   inicia_mundo.c/h     → cria mundo

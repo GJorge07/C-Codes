@@ -53,21 +53,53 @@ int valida_fila(mundo_t *mundo, int base) {
 }
 /*---------------------------------------CRIAÇÃO DE EVENTOS-------------------------------------------------*/
 
-void cria_chega();
+void cria_chega() {
 
-void cria_espera();
 
-void cria_desiste();
 
-void cria_avisa();
+}
 
-void cria_viaja();
+void cria_espera() {
 
-void cria_sai();
 
-void cria_entra();
 
-void cria_morre();
+}
+
+void cria_desiste() {
+
+
+
+}
+
+void cria_avisa() {
+
+
+    
+}
+
+void cria_viaja() {
+
+
+
+}
+
+void cria_sai() {
+
+
+
+}
+
+void cria_entra() {
+
+
+
+}
+
+void cria_morre() {
+
+
+
+}
 
 /*---------------------------------------PRINTF DAS FUNÇÕES------------------------------------------------*/
 

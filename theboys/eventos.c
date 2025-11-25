@@ -101,32 +101,116 @@ void evento_espera(mundo_t *mundo, struct espera *espera) {
 
 void evento_desiste(mundo_t *mundo, struct desiste *desiste) {
 
+    if(!mundo || !desiste)
+        return;
+
+    if (!heroi_valido(mundo, desiste->heroi) || !base_valida(mundo, desiste->base))
+        return;
+
+    int destino = aleat(0, mundo->nbases - 1);    // precisa do -1??
+
+    cria_viaja();
+
+    imprime_desiste();
 }
 
-void evento_avisa(mundo_t *mundo, struct avisa *avisa) {
+void evento_avisa(mundo_t *mundo, struct avisa *avisa) {          //ver se ta certo o loop
+
+    if (!mundo || !avisa)
+        return;
+
+
+    int b = mundo->bases[avisa->base]->lotacao;          //vagas em B
+    int h = cjto_card(mundo->bases[avisa->base]->presentes);   //herois presentes na base
+
+    imprime_avisa_porteiro();
+
+    while (b > 0 && b > h ) {            //n tenho ctz q ta certo
+
+        fila_retira(mundo->bases[avisa->base]->espera, &heroi_removido);         //retira primeiro heroi da fila
+        cjto_insere(mundo->bases[avisa->base]->presentes, heroi_removido);       //insere heroi na fila
+
+
+        imprime_avisa_e_admite();
+
+        cria_entra();
+
+        b = mundo->bases[avisa->base]->lotacao;
+    }
 
 }
 
 void evento_entra(mundo_t *mundo, struct entra *entra) {
 
+    if (!mundo || !entra)
+        return;
+
+    if (!heroi_valido(mundo,entra->heroi) || !base_valida(mundo,entra->base))
+        return;
+
+    int tpb = 15 + (mundo->herois[entra->heroi]->paciencia * aleat(1,20));
+                    
+    cria_sai();
+
+    imprime_entra();
+
 }
 
 void evento_sai(mundo_t *mundo, struct sai *sai) {
 
+    if (!mundo || !sai) 
+        return;
+
+     if (!heroi_valido(mundo, sai->heroi) || !base_valida(mundo, sai->base))
+        return;
+
+    cjto_retira(mundo->bases[sai->base]->presentes, sai->heroi);    //retira o heroi do conjunto de herois em B
+    int destino = aleat(0, mundo->nbases-1);    //escolhe base aleatoria
+
+    cria_viaja();
+    cria_avisa();
+    
+    imprime_sai();
 }
 
 void evento_viaja(mundo_t *mundo, struct viaja *viaja) {
 
+    if (!mundo || !viaja)
+        return;
+
+    if (!heroi_valido(mundo, viaja->heroi) || !base_valida(mundo, viaja->base))
+        return;
+
+
+    cria_chega();
+    imprime_viaja();    
 }
 
 void evento_morre(mundo_t *mundo, struct morre *morre) {
+
+    if (!mundo || !morre)
+        return;
+
+    if (!heroi_valido(mundo, morre->heroi) || !base_valida(mundo, morre->base))
+        return;
+
+    cjto_retira(mundo->bases[morre->base]->presentes, morre->heroi);    //retira heroi da base
+
+    mundo->herois[morre->heroi]->vivo = 0;              //heroi = morto
+
+    cria_avisa();
+    imprime_morre();
 
 }
 
 void evento_missao(mundo_t *mundo, struct missao *missao) {
 
+
+
 }
 
 void evento_fim(mundo_t *mundo, struct fim *fim) {
     
+
+
 }

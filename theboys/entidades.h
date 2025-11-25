@@ -25,7 +25,8 @@ struct heroi {
     int paciencia;
     int velocidade;
     int experiencia;
-    int base_atual;         
+    int base_atual;   
+    int vivo  //1 vivo e 0 morto      
 };
 
 struct base {
