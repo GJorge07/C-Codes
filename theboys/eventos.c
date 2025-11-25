@@ -5,6 +5,7 @@
 //includes - falta mais
 #include "entidades.h"
 #include "eventos.h"
+#include "outras_funcoes.h"
 
 //defines
 #define T_FIM_DO_MUNDO 525600
@@ -81,7 +82,20 @@ void evento_chega(mundo_t *mundo, struct chega *chega) {
 
 }
 
+//heroi entra na fila de espera e porteiro é avisado
 void evento_espera(mundo_t *mundo, struct espera *espera) {
+
+    if (!mundo || !espera)          //Pra não dar seg fault antes
+        return;
+
+    if (!heroi_valido(mundo, espera->heroi) || !base_valida(mundo, espera->base)  || !fila_valida(mundo, espera->base))
+        return;
+
+    fila_insere(mundo->bases[espera->base]->espera, espera->heroi);     //insere heroi na base B
+
+    cria_avisa();
+
+    imprime_espera();
 
 }
 

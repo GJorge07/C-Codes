@@ -5,7 +5,27 @@
 
 //includes
 
-//Atualmente acho q as funções de impressão (printf) ficarão aqui
+int valida_base(mundo_t *mundo, int base);
+
+int valida_heroi(mundo_t *mundo, int heroi);
+
+int valida_fila(mundo_t *mundo, int base);
+
+void cria_chega();
+
+void cria_espera();
+
+void cria_desiste();
+
+void cria_avisa();
+
+void cria_viaja();
+
+void cria_sai();
+
+void cria_entra();
+
+void cria_morre();
 
 void imprime_chega_e_espera();
 

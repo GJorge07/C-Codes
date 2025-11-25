@@ -9,6 +9,65 @@ int aleat(int min, int max) {
     return min + rand() % (max - min + 1);
 }
 
+int valida_base(mundo_t *mundo, int base) {
+
+    if (!mundo)
+        return 0;
+
+    if (base < 0 || base >= mundo->nbases)         // 0 até N-1
+        return 0;
+    
+    if (!mundo->bases[base])                 //Se base existe mas ponteiro é NULL
+        return 0;
+
+    return 1;
+}
+
+int valida_heroi(mundo_t *mundo, int heroi) {
+
+
+    if (!mundo)
+        return 0;
+
+    if (heroi < 0 || heroi <= mundo->nherois)       //0 até N-1
+        return 0;
+
+    if (!mundo->herois[heroi])           //Se heroi existe mas ponteiro é NULL
+        return 0;
+    
+    return 1;
+}
+
+int valida_fila(mundo_t *mundo, int base) {
+
+    if (!mundo)
+        return 0;
+
+    if (!base_valida(mundo,base)) //verifica se a base existe
+        return 0;
+
+    if (!mundo->bases[base]->espera)    //verifica se fila de espera existe
+        return 0;
+
+    return 1;
+}
+/*---------------------------------------CRIAÇÃO DE EVENTOS-------------------------------------------------*/
+
+void cria_chega();
+
+void cria_espera();
+
+void cria_desiste();
+
+void cria_avisa();
+
+void cria_viaja();
+
+void cria_sai();
+
+void cria_entra();
+
+void cria_morre();
 
 /*---------------------------------------PRINTF DAS FUNÇÕES------------------------------------------------*/
 
