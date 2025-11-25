@@ -53,52 +53,110 @@ int valida_fila(mundo_t *mundo, int base) {
 }
 /*---------------------------------------CRIAÇÃO DE EVENTOS-------------------------------------------------*/
 
-void cria_chega() {
+void cria_chega(mundo_t *mundo, int heroi, int base, int tempo) {
 
+    struct chega *chega;
+    if (!(chega = malloc(sizeof(struct chega))))
+        return;
 
+    chega->heroi = heroi;
+    chega->base = base;
+    chega->tempo = tempo;
 
+    fprio_insere(mundo->lef, chega, CHEGA, chega->tempo);
 }
 
-void cria_espera() {
+void cria_espera(mundo_t *mundo, int tempo, int heroi, int base) {
 
+    struct espera *espera;
+    if (!(espera = malloc(sizeof(struct espera))))
+        return;
 
+    espera->tempo = tempo;
+    espera->heroi = heroi;
+    espera->base = base;
 
+    fprio_insere(mundo->lef, espera, ESPERA, espera->tempo);
 }
 
-void cria_desiste() {
+void cria_desiste(mundo_t *mundo, int tempo, int heroi, int base) {
 
+    struct desiste *desiste;
+    if (!(desiste = malloc(sizeof(struct desiste))))
+        return;
 
+    desiste->tempo = tempo;
+    desiste->heroi = heroi;
+    desiste->base = base;
 
+    fprio_insere(mundo->lef, desiste, DESISTE, desiste->tempo);
 }
 
-void cria_avisa() {
+void cria_avisa(mundo_t *mundo, int tempo, int base) {
 
+    struct avisa *avisa;
+    if (!(avisa = malloc(sizeof(struct avisa))))
+        return;
 
+    avisa->tempo = tempo;
+    avisa->base = base;
     
+    fprio_insere(mundo->lef, avisa, AVISA, avisa->tempo);
 }
 
-void cria_viaja() {
+void cria_viaja(mundo_t *mundo, int tempo, int heroi, int base, int destino) {
 
+    struct viaja *viaja;
+    if (!(viaja = malloc(sizeof(struct viaja))))
+        return;
 
+    viaja->tempo = tempo;
+    viaja->heroi = heroi;
+    viaja->base = base;
+    viaja->destino = destino;
 
-}
-
-void cria_sai() {
-
-
-
-}
-
-void cria_entra() {
-
-
+    fprio_insere(mundo->lef, viaja, VIAJA, viaja->tempo);
 
 }
 
-void cria_morre() {
+void cria_sai(mundo_t *mundo, int tempo, int heroi, int base) {
 
+    struct sai *sai;
+    if (!(sai = malloc(sizeof(struct sai))))
+        return;
 
+    sai->tempo = tempo;
+    sai->heroi = heroi;
+    sai->base = base;
 
+    fprio_insere(mundo->lef, sai, SAI, sai->tempo);
+}
+
+void cria_entra(mundo_t *mundo, int tempo, int heroi, int base) {
+
+    struct entra *entra;
+    if (!(entra = malloc(sizeof(struct entra))))
+        return;
+
+    entra->tempo = tempo;
+    entra->heroi = heroi;
+    entra->base = base;
+
+    fprio_insere(mundo->lef, entra, ENTRA, entra->tempo);
+}
+
+void cria_morre(mundo_t *mundo, int tempo, int heroi, int base, int missao) {
+
+    struct morre *morre;
+    if (!(morre = malloc(sizeof(struct morre))))
+        return;
+
+    morre->tempo = tempo;
+    morre->heroi = heroi;
+    morre->base = base;
+    morre->missao = missao;
+
+    fprio_insere(mundo->lef, morre, MORRE, morre->tempo);
 }
 
 /*---------------------------------------PRINTF DAS FUNÇÕES------------------------------------------------*/
