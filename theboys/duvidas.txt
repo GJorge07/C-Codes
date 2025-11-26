@@ -4,8 +4,8 @@
 4.usei cast no inicia_mundo, pode? é dinamico msm ?
 8.falta o missao e o morre
 9.ver os comentarios com duvidas em cada evento
-12.arrumar td os malloc
-13.rever evento avisa, rever os problemas ai em cima, testar sem missao e sem fim pra dps começar eles
+12.arrumar td os malloc de eventos iniciais e inicia mundo
+13.rever os problemas ai em cima, testar sem missao e sem fim pra dps começar eles
 
 theboys.c
   inicia_mundo.c/h     → cria mundo

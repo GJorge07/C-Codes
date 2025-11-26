@@ -85,7 +85,6 @@ void evento_chega(mundo_t *mundo, struct chega *chega) {
         imprime_chega_e_desiste(mundo, chega);
     }
     
-
 }
 
 //heroi entra na fila de espera e porteiro é avisado
@@ -125,13 +124,16 @@ void evento_avisa(mundo_t *mundo, struct avisa *avisa) {          //ver se ta ce
     if (!mundo || !avisa)
         return;
 
+     if (!base_valida(mundo, avisa->base))
+        return;
 
     int b = mundo->bases[avisa->base]->lotacao;          //vagas em B
     int h = cjto_card(mundo->bases[avisa->base]->presentes);   //herois presentes na base
+    int tam_fila = fila_tamanho(mundo->bases[avisa->base]->espera);
 
     imprime_avisa_porteiro(mundo, avisa);
 
-    while (b > 0 && b > h ) {            //n tenho ctz q ta certo
+    while (tam_fila > 0 && b > h ) {            //n tenho ctz q ta certo
 
         int heroi_removido;
 
@@ -139,11 +141,12 @@ void evento_avisa(mundo_t *mundo, struct avisa *avisa) {          //ver se ta ce
         cjto_insere(mundo->bases[avisa->base]->presentes, heroi_removido);       //insere heroi na fila
 
 
-        imprime_avisa_e_admite(mundo, avisa);
+        imprime_avisa_e_admite(avisa,heroi_removido);
 
         cria_entra(mundo, avisa->tempo, heroi_removido, avisa->base);
 
-        b = mundo->bases[avisa->base]->lotacao;
+        h = cjto_card(mundo->bases[avisa->base]->presentes);   //herois presentes na base
+        tam_fila = fila_tamanho(mundo->bases[avisa->base]->espera);
     }
 
 }
