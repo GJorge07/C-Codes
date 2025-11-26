@@ -6,6 +6,7 @@
 #include "entidades.h"
 #include "eventos.h"
 #include "outras_funcoes.h"
+#include <math.h>
 
 //defines
 #define T_FIM_DO_MUNDO 525600
@@ -62,23 +63,28 @@ void evento_chega(mundo_t *mundo, struct chega *chega) {
     if (!mundo || !chega)
         return;
 
-    if (!)     //se heroi tiver morto, return
+    if (!heroi_valido(mundo, chega->heroi) || !base_valida(mundo, chega->base))
         return;
 
     mundo->herois[chega->heroi]->base_atual = chega->base;
 
-
-    if (base->lotacao > 0 && base->fila_t == 0)
+    if (fila_tamanho(mundo->bases[chega->base]->espera) == 0 && mundo->bases[chega->base]->presentes < mundo->bases[chega->base]->lotacao )       //se há vagas em B e a fila de espera em B está vazia
         esp = 1;
-    else
-        esp = heroi->paciencia > (10 * base->lotacao (em b));
+    else 
+        esp = mundo->herois[chega->heroi]->paciencia > (10 * mundo->bases[chega->base]->lotacao);
+    
 
-    if esp {
-        fprio_insere(mundo->lef,x,ESPERA,y);
-        return;
+    if (esp) {
+        cria_espera(mundo, chega->tempo, chega->heroi, chega->base);
+        imprime_chega_e_espera(mundo, chega);
+        
     }
 
-    fprio_insere(mundo->lef,x,DESISTE,y);
+    else {
+        cria_desiste(mundo, chega->tempo, chega->heroi, chega->base);
+        imprime_chega_e_desiste(mundo, chega);
+    }
+    
 
 }
 
@@ -93,9 +99,9 @@ void evento_espera(mundo_t *mundo, struct espera *espera) {
 
     fila_insere(mundo->bases[espera->base]->espera, espera->heroi);     //insere heroi na base B
 
-    cria_avisa();
+    cria_avisa(mundo, espera->tempo, espera->base);
 
-    imprime_espera();
+    imprime_espera(mundo, espera);
 
 }
 
@@ -109,9 +115,9 @@ void evento_desiste(mundo_t *mundo, struct desiste *desiste) {
 
     int destino = aleat(0, mundo->nbases - 1);    // precisa do -1??
 
-    cria_viaja();
+    cria_viaja(mundo, desiste->tempo, desiste->heroi, desiste->base, destino);
 
-    imprime_desiste();
+    imprime_desiste(mundo, desiste);
 }
 
 void evento_avisa(mundo_t *mundo, struct avisa *avisa) {          //ver se ta certo o loop
@@ -123,17 +129,19 @@ void evento_avisa(mundo_t *mundo, struct avisa *avisa) {          //ver se ta ce
     int b = mundo->bases[avisa->base]->lotacao;          //vagas em B
     int h = cjto_card(mundo->bases[avisa->base]->presentes);   //herois presentes na base
 
-    imprime_avisa_porteiro();
+    imprime_avisa_porteiro(mundo, avisa);
 
     while (b > 0 && b > h ) {            //n tenho ctz q ta certo
+
+        int heroi_removido;
 
         fila_retira(mundo->bases[avisa->base]->espera, &heroi_removido);         //retira primeiro heroi da fila
         cjto_insere(mundo->bases[avisa->base]->presentes, heroi_removido);       //insere heroi na fila
 
 
-        imprime_avisa_e_admite();
+        imprime_avisa_e_admite(mundo, avisa);
 
-        cria_entra();
+        cria_entra(mundo, avisa->tempo, heroi_removido, avisa->base);
 
         b = mundo->bases[avisa->base]->lotacao;
     }
@@ -150,9 +158,9 @@ void evento_entra(mundo_t *mundo, struct entra *entra) {
 
     int tpb = 15 + (mundo->herois[entra->heroi]->paciencia * aleat(1,20));
                     
-    cria_sai();
+    cria_sai (mundo, entra->tempo + tpb, entra->heroi, entra->base);
 
-    imprime_entra();
+    imprime_entra(mundo, entra, entra + tpb);             //ver se é entra + tpb mesmo
 
 }
 
@@ -167,10 +175,10 @@ void evento_sai(mundo_t *mundo, struct sai *sai) {
     cjto_retira(mundo->bases[sai->base]->presentes, sai->heroi);    //retira o heroi do conjunto de herois em B
     int destino = aleat(0, mundo->nbases-1);    //escolhe base aleatoria
 
-    cria_viaja();
-    cria_avisa();
+    cria_viaja(mundo, sai->tempo, sai->heroi, destino);
+    cria_avisa(mundo, sai->tempo, sai->base);
     
-    imprime_sai();
+    imprime_sai(mundo, sai);
 }
 
 void evento_viaja(mundo_t *mundo, struct viaja *viaja) {
@@ -178,12 +186,26 @@ void evento_viaja(mundo_t *mundo, struct viaja *viaja) {
     if (!mundo || !viaja)
         return;
 
-    if (!heroi_valido(mundo, viaja->heroi) || !base_valida(mundo, viaja->base))
+    if (!heroi_valido(mundo, viaja->heroi) || !base_valida(mundo, viaja->destino))
         return;
 
+    int x1 = mundo->bases[mundo->herois[viaja->heroi]->base_atual]->local_base.x;
+    int y1 = mundo->bases[mundo->herois[viaja->heroi]->base_atual]->local_base.y;
 
-    cria_chega();
-    imprime_viaja();    
+    int x2 = mundo->bases[viaja->destino]->local_base.x;
+    int y2 = mundo->bases[viaja->destino]->local_base.y;
+
+    int formula1 = (x1 - x2) * (x1 - x2);
+	int formula2 = (y1 - y2) * (y1 - y2);
+	int formulageral = formula1 + formula2;
+
+    int distancia = (int) sqrt(formulageral);
+
+    int duracao = (distancia / mundo->herois[viaja->heroi]->velocidade);
+
+
+    cria_chega(mundo, viaja->heroi, viaja->destino, viaja->tempo + duracao); 
+    imprime_viaja(mundo, viaja, distancia, duracao);    
 }
 
 void evento_morre(mundo_t *mundo, struct morre *morre) {
@@ -198,8 +220,8 @@ void evento_morre(mundo_t *mundo, struct morre *morre) {
 
     mundo->herois[morre->heroi]->vivo = 0;              //heroi = morto
 
-    cria_avisa();
-    imprime_morre();
+    cria_avisa(mundo, morre->tempo, morre->base);
+    imprime_morre(mundo,morre);
 
 }
 

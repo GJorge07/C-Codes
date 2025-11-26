@@ -104,7 +104,7 @@ void cria_avisa(mundo_t *mundo, int tempo, int base) {
     fprio_insere(mundo->lef, avisa, AVISA, avisa->tempo);
 }
 
-void cria_viaja(mundo_t *mundo, int tempo, int heroi, int base, int destino) {
+void cria_viaja(mundo_t *mundo, int tempo, int heroi, int destino) {
 
     struct viaja *viaja;
     if (!(viaja = malloc(sizeof(struct viaja))))
@@ -112,7 +112,6 @@ void cria_viaja(mundo_t *mundo, int tempo, int heroi, int base, int destino) {
 
     viaja->tempo = tempo;
     viaja->heroi = heroi;
-    viaja->base = base;
     viaja->destino = destino;
 
     fprio_insere(mundo->lef, viaja, VIAJA, viaja->tempo);
