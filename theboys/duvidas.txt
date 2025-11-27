@@ -6,6 +6,8 @@
 9.ver os comentarios com duvidas em cada evento
 12.arrumar td os malloc de eventos iniciais e inicia mundo
 13.rever os problemas ai em cima, testar sem missao e sem fim pra dps começar eles
+14. ver se deixo o u n o valida heroi, valida base e valida fila.... q erro q tenho q conferir ????
+15. arrumar chama eventos e ver pq n ta saindo print :(
 
 theboys.c
   inicia_mundo.c/h     → cria mundo

@@ -4,7 +4,7 @@
 #include "chama_eventos.h"
 #include "eventos.h"
 
-void lef(mundo_t *mundo) {
+void chama_eventos(mundo_t *mundo) {
 
     int continuar = 1;
 
@@ -34,14 +34,14 @@ void lef(mundo_t *mundo) {
                 evento_morre(mundo, item_escolhido);
                 break;
 
-            case MISSAO:
-                evento_missao(mundo, item_escolhido);
-                break;
+            //case MISSAO:
+                //evento_missao(mundo, item_escolhido);
+                //break;
 
-            case FIM:
-                evento_fim(mundo, item_escolhido);
-                continuar = 0;   // encerra o while
-                break;
+            //case FIM:
+                //evento_fim(mundo, item_escolhido);
+                //continuar = 0;   // encerra o while
+                //break;
         }
 
         free(item_escolhido);  //toda vez que um evento é processado, libera a memória alocada para ele, pois ele sai da fprio e fica "perdido"

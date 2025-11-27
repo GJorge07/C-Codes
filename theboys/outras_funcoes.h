@@ -5,6 +5,8 @@
 
 //includes
 
+int aleat(int min, int max);
+
 int valida_base(mundo_t *mundo, int base);
 
 int valida_heroi(mundo_t *mundo, int heroi);
@@ -39,13 +41,13 @@ void imprime_avisa_porteiro();
 
 void imprime_avisa_e_admite();
 
-void imprime_entrada();
+void imprime_entra();
 
-void imprime_saida();
+void imprime_sai();
 
-void imprime_viagem();
+void imprime_viaja();
 
-void imprime_morte();
+void imprime_morre();
 
 /*As funções de imprimir missão e imprimir fim deixei para colocar no eventos pois são mais complexas*/
 

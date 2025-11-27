@@ -19,7 +19,7 @@
 #define MISSAO 9 
 #define FIM 10
 
-//Protótipo da lista de eventos futuros, que agenda e processa eventos do mundo ao longo do tempo
-void lef(mundo_t *mundo);
+//Protótipo da lista de eventos futuros, que agenda e processa eventos do mundo ao longo do tempo, LEF
+void chama_eventos(mundo_t *mundo);
 
 #endif

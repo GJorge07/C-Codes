@@ -1,26 +1,6 @@
 #include "fprio.h"
 #include <stdio.h>
 #include <stdlib.h>
-struct fpnodo_t
-{
-  void *item ;          // item associado ao nodo
-  int   tipo ;          // tipo do item
-  int   prio ;          // prioridade do item
-  struct fpnodo_t *prox;    // próximo nodo
-};
-
-// descreve uma fila de prioridades, usada em eventos ESPERA e AVISA
-//USADA PRA IMPLEMENTAR A LEF
-struct fprio_t
-{
-  struct fpnodo_t *prim ;   // primeiro nodo da fila
-  int num ;         // número de itens na fila
-} ;
-
-// descreve um nodo da fila de prioridades
-struct fpnodo_t;
-// descreve uma fila de prioridades
-struct fprio_t;
 
 // Cria uma fila vazia.
 // Retorno: ponteiro para a fila criada ou NULL se erro.
