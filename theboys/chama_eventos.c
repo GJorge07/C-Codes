@@ -19,29 +19,45 @@ void chama_eventos(mundo_t *mundo) {
         switch (tipo) {                        //verifica o tipo do evento e chama a função correspondente
 
             case CHEGA:
-                evento_chega(mundo, item_escolhido);
+                evento_chega(mundo, (struct chega*)item_escolhido);
+                break;
+
+            case ESPERA:
+                evento_espera(mundo, (struct espera*)item_escolhido);
+                break;
+
+            case DESISTE:
+                evento_desiste(mundo, (struct desiste*)item_escolhido);
+                break;
+
+            case AVISA:
+                evento_avisa(mundo, (struct avisa*)item_escolhido);
+                break;
+
+            case ENTRA:
+                evento_entra(mundo, (struct entra*)item_escolhido);
                 break;
 
             case SAI:
-                evento_sai(mundo, item_escolhido);
+                evento_sai(mundo, (struct sai*)item_escolhido);
                 break;
 
             case VIAJA:
-                evento_viaja(mundo, item_escolhido);
+                evento_viaja(mundo, (struct viaja*)item_escolhido);
                 break;
 
             case MORRE:
-                evento_morre(mundo, item_escolhido);
+                evento_morre(mundo, (struct morre*)item_escolhido);
                 break;
 
             //case MISSAO:
-                //evento_missao(mundo, item_escolhido);
+                //evento_missao(mundo, (struct missao*)item_escolhido);
                 //break;
 
-            //case FIM:
-                //evento_fim(mundo, item_escolhido);
-                //continuar = 0;   // encerra o while
-                //break;
+            case FIM:
+                //evento_fim(mundo, (struct fim*)item_escolhido);
+                continuar = 0;   // encerra o while
+                break;
         }
 
         free(item_escolhido);  //toda vez que um evento é processado, libera a memória alocada para ele, pois ele sai da fprio e fica "perdido"

@@ -1,13 +1,11 @@
 1. onde vai o eventos iniciais (6) ?   ok!
 2. Oq são as mensagens de depuração no final da 7.9
-3.é void no chama_eventos mesmo ??
 4.usei cast no inicia_mundo, pode? é dinamico msm ?
 8.falta o missao e o morre
 9.ver os comentarios com duvidas em cada evento
 12.arrumar td os malloc de eventos iniciais e inicia mundo
-13.rever os problemas ai em cima, testar sem missao e sem fim pra dps começar eles
-14. ver se deixo o u n o valida heroi, valida base e valida fila.... q erro q tenho q conferir ????
-15. arrumar chama eventos e ver pq n ta saindo print :(
+14. ver se deixo ou n o valida heroi, valida base e valida fila.... q erro q tenho q conferir ????
+16. ver cria missao
 
 theboys.c
   inicia_mundo.c/h     → cria mundo

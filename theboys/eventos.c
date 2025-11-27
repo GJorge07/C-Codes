@@ -10,51 +10,33 @@
 #include "chama_eventos.h"
 
 //defines
-#define T_FIM_DO_MUNDO 525600
+#define T_FIM_DO_MUNDO 1000
 
 void eventos_iniciais(mundo_t *mundo) {
 
-    mundo->lef = fprio_cria();   // cria a fila de prioridade da lista de eventos futuros
+    int base, tempo1, tempo2;
 
-    for (int i = 0; i < mundo->nherois; i++) {      //percorre todos os herois do mundo
+    
+    for (int i = 0; i < mundo->nherois; i++) {
 
-        // cria o evento e insere heroi
-        struct evento_t *ev = malloc(sizeof(struct evento_t));            //nn fiz typedef desse
-
-        ev->tipo = CHEGA;
-        ev->tempo = aleat(0, 4320);
-        ev->heroi = i;                      //qual heroi chega em uma base aleat em um tempo aleat
-        ev->base = aleat(0, mundo->nbases - 1);
-
+        base = aleat(0, mundo->nbases - 1);
+        tempo1 = aleat(0, 4321);
+        cria_chega(mundo, i, base, tempo1);         //i sao os herois
+    }
+    
+    for (int j = 0; j < mundo->nmissoes; j++) {
         
-        mundo->herois[i]->base_atual = ev->base;            //att base atual do heroi antes da simulação começar
-
-        // lista(lef), item(ev), tipo(chega), prio(ev->tempo)
-        fprio_insere(mundo->lef, ev, CHEGA, ev->tempo);
+        tempo2 = aleat(0, T_FIM_DO_MUNDO);
+        cria_missao(mundo,j,mundo->missoes[j]->habilidades_missao,mundo->missoes[j]->local_missao,tempo2);
     }
+    
+    //para o fim, não fiz cria_fim!!!!!!!
+    struct fim *fim;
+	if (!(fim = malloc(sizeof(struct fim))))
+		return; 
+	fim->tempo = T_FIM_DO_MUNDO;
 
-    //insere missoes na lef
-    for (int i=0; i < mundo->nmissoes; i++) {
-
-        struct evento_t *ev = malloc(sizeof(struct evento_t));
-
-        ev->tipo = MISSAO;
-        ev->tempo = aleat(0,T_FIM_DO_MUNDO);            //cada missao m ocorre em um tempo aleat
-        ev->missao = i;
-
-        // lista(lef), item(ev), tipo(missao), prio(ev->tempo)
-        fprio_insere(mundo->lef, ev, MISSAO, ev->tempo);
-    }
-
-    //insere fim na lef, serve p finalizar a simulação
-     struct evento_t *ev = malloc(sizeof(struct evento_t));
-
-     ev->tempo = T_FIM_DO_MUNDO;
-     ev->tipo = FIM;
-
-     fprio_insere(mundo->lef,ev,FIM,ev->tempo);
-
-    //Quando o tempo chegar em 525.600, acabou a simulação.
+	fprio_insere(mundo->lef, fim, FIM, T_FIM_DO_MUNDO);
 }
 
 void evento_chega(mundo_t *mundo, struct chega *chega) {
@@ -168,7 +150,9 @@ void evento_entra(mundo_t *mundo, struct entra *entra) {
                     
     cria_sai (mundo, entra->tempo + tpb, entra->heroi, entra->base);
 
-    imprime_entra(mundo, entra, entra->tempo + tpb);             //ver se é entra + tpb mesmo
+    int tempo_sai = entra->tempo + tpb;
+
+    imprime_entra(mundo, entra, tempo_sai);             //ver se é entra + tpb mesmo
 
 }
 

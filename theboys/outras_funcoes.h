@@ -3,7 +3,8 @@
 #ifndef OUTRAS_FUNCOES_H
 #define OUTRAS_FUNCOES_H
 
-//includes
+#include "entidades.h"
+#include "eventos.h"
 
 int aleat(int min, int max);
 
@@ -13,41 +14,44 @@ int valida_heroi(mundo_t *mundo, int heroi);
 
 int valida_fila(mundo_t *mundo, int base);
 
-void cria_chega();
+void cria_chega(mundo_t *mundo, int heroi, int base, int tempo);
 
-void cria_espera();
+void cria_espera(mundo_t *mundo, int tempo, int heroi, int base);
 
-void cria_desiste();
+void cria_desiste(mundo_t *mundo, int tempo, int heroi, int base);
 
-void cria_avisa();
+void cria_avisa(mundo_t *mundo, int tempo, int base);
 
-void cria_viaja();
+void cria_viaja(mundo_t *mundo, int tempo, int heroi, int destino);
 
-void cria_sai();
+void cria_sai(mundo_t *mundo, int tempo, int heroi, int base);
 
-void cria_entra();
+void cria_entra(mundo_t *mundo, int tempo, int heroi, int base);
 
-void cria_morre();
+void cria_morre(mundo_t *mundo, int tempo, int heroi, int base, int missao);
 
-void imprime_chega_e_espera();
+void cria_missao(mundo_t *mundo, int id, struct cjto_t *hab, struct localizacao local, int tempo);
 
-void imprime_chega_e_desiste();
+void imprime_chega_e_espera(mundo_t *mundo, struct chega *chega);
 
-void imprime_espera();
+void imprime_chega_e_desiste(mundo_t *mundo, struct chega *chega);
 
-void imprime_desiste();
+void imprime_espera(mundo_t *mundo, struct espera *espera);
 
-void imprime_avisa_porteiro();
+void imprime_desiste(struct desiste *desiste);
 
-void imprime_avisa_e_admite();
+void imprime_avisa_porteiro(mundo_t *mundo, struct avisa *avisa);
 
-void imprime_entra();
+void imprime_avisa_e_admite(struct avisa *avisa, int heroi_removido);
 
-void imprime_sai();
+void imprime_entra(mundo_t *mundo, struct entra *entra, int sai_tempo);
 
-void imprime_viaja();
+void imprime_sai(mundo_t *mundo, struct sai *sai);
 
-void imprime_morre();
+void imprime_viaja(mundo_t *mundo, struct viaja *viaja, int distancia, int duracao);
+
+void imprime_morre(struct morre *morre);
+
 
 /*As funções de imprimir missão e imprimir fim deixei para colocar no eventos pois são mais complexas*/
 

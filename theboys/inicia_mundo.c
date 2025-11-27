@@ -11,7 +11,7 @@
 
 //defines
 #define T_INICIO 0
-#define T_FIM_DO_MUNDO 525600
+#define T_FIM_DO_MUNDO 1000
 #define N_TAMANHO_MUNDO 20000
 #define N_HABILIDADES 10
 #define N_HEROIS (N_HABILIDADES * 5)
@@ -28,7 +28,9 @@
     if (mundo == NULL) 
         return NULL;
         
-    srand(time(NULL));
+    mundo->lef = fprio_cria();
+    if (mundo->lef == NULL)
+        return NULL;
 
 
     //inicializa valores do mundo
@@ -54,6 +56,7 @@
         if (mundo->herois[i] == NULL) 
             return NULL;
 
+        mundo->herois[i]->vivo = 1;     //inicialmente todos vivos
         mundo->herois[i]->id = i;
         mundo->herois[i]->paciencia = aleat(0,100);
         mundo->herois[i]->velocidade = aleat(50,5000);

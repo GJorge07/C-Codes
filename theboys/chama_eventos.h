@@ -7,6 +7,7 @@
 #include "lista.h"           
 #include "fprio.h"
 #include "conjunto.h"
+#include "eventos.h"
 
 #define CHEGA 1
 #define ESPERA 2
