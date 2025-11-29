@@ -16,6 +16,8 @@ void chama_eventos(mundo_t *mundo) {
         if (item_escolhido == NULL) 
             break;
 
+         mundo->relogio = prio;            //fiz pq do chat, n sei c ta certo
+
         switch (tipo) {                        //verifica o tipo do evento e chama a função correspondente
 
             case CHEGA:
@@ -50,12 +52,12 @@ void chama_eventos(mundo_t *mundo) {
                 evento_morre(mundo, (struct morre*)item_escolhido);
                 break;
 
-            //case MISSAO:
-                //evento_missao(mundo, (struct missao*)item_escolhido);
-                //break;
+            case MISSAO:
+                evento_missao(mundo, (struct missao*)item_escolhido);
+                break;
 
             case FIM:
-                //evento_fim(mundo, (struct fim*)item_escolhido);
+                evento_fim(mundo, (struct fim*)item_escolhido);
                 continuar = 0;   // encerra o while
                 break;
         }

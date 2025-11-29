@@ -36,6 +36,8 @@ struct base {
     struct cjto_t *presentes;  
     struct fila_t *espera;
     struct localizacao local_base;
+    int missoes_cumpridas;
+    int fila_max;
 
 };
 
@@ -44,6 +46,9 @@ struct missao {
     int id;
     struct cjto_t *habilidades_missao;
     struct localizacao local_missao;
+    int ncumpridas;  
+    int tentativas;
+    int tempo;
 
 };
 
@@ -61,6 +66,8 @@ struct mundo {
     int nhabilidades;
     
     int ncompostosv;
+
+    int neventos;
 
     struct localizacao tamanho_mundo;
 

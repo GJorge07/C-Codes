@@ -8,6 +8,12 @@
 
 int aleat(int min, int max);
 
+int calcula_dist(struct localizacao loc1, struct localizacao loc2);
+
+void Particao(mundo_t *mundo, missao_t *missao, int vetor_bases[], int inicio, int final, int *indice_pivo);
+
+void quicksort(mundo_t *mundo, missao_t *missao, int dist_missao[], int inicio, int fim);
+
 int valida_base(mundo_t *mundo, int base);
 
 int valida_heroi(mundo_t *mundo, int heroi);
@@ -22,7 +28,7 @@ void cria_desiste(mundo_t *mundo, int tempo, int heroi, int base);
 
 void cria_avisa(mundo_t *mundo, int tempo, int base);
 
-void cria_viaja(mundo_t *mundo, int tempo, int heroi, int destino);
+void cria_viaja(mundo_t *mundo, int tempo, int heroi, int base_origem, int destino);
 
 void cria_sai(mundo_t *mundo, int tempo, int heroi, int base);
 
