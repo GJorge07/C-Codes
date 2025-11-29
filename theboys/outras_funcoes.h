@@ -14,11 +14,7 @@ void Particao(mundo_t *mundo, missao_t *missao, int vetor_bases[], int inicio, i
 
 void quicksort(mundo_t *mundo, missao_t *missao, int dist_missao[], int inicio, int fim);
 
-int valida_base(mundo_t *mundo, int base);
-
 int valida_heroi(mundo_t *mundo, int heroi);
-
-int valida_fila(mundo_t *mundo, int base);
 
 void cria_chega(mundo_t *mundo, int heroi, int base, int tempo);
 

@@ -10,7 +10,6 @@ int aleat(int min, int max) {
     return min + rand() % (max - min + 1);
 }
 
-// ...existing code...
 
 /* Calcula distância euclidiana entre duas localizações */
 int calcula_dist(struct localizacao loc1, struct localizacao loc2) {
@@ -20,83 +19,52 @@ int calcula_dist(struct localizacao loc1, struct localizacao loc2) {
     return sqrt(dx * dx + dy * dy);
 }
 
+
 /* Partição para ordenar bases por distância à missão */
-void Particao(mundo_t *mundo, missao_t *missao, int vetor_bases[], int inicio, int final, int *indice_pivo) {
+int Particao(mundo_t *mundo, missao_t *missao, int v[], int ini, int fim) {
 
-    int esq, dir, elemento_pivo, temp;
-    int dist_pivo_calc, dist_esq_calc, dist_dir_calc;
-    
-    /* Usa o primeiro elemento como pivô */
-    *indice_pivo = inicio;
-    elemento_pivo = vetor_bases[*indice_pivo];
-    esq = inicio + 1;
-    dir = final;
+    int p = v[ini];
+    int i = ini + 1;
+    int j = fim;
 
-    /* Calcula distância do pivô à missão (assumindo missao global ou passada por parâmetro) */
-    /* NOTA: Você precisa ajustar isso para passar a missão correta */
-    struct localizacao local_missao_atual = missao->local_missao;
-    
-    dist_pivo_calc = calcula_dist(mundo->bases[vetor_bases[*indice_pivo]]->local_base, local_missao_atual);
+    struct localizacao Lm = missao->local_missao;
 
-    while (esq <= dir) {
-        /* Avança da esquerda enquanto distância for menor/igual ao pivô */
-        if (esq <= final) {
-            dist_esq_calc = calcula_dist(mundo->bases[vetor_bases[esq]]->local_base, local_missao_atual);
-        }
-        while (esq <= final && dist_esq_calc <= dist_pivo_calc) {
-            esq++;
-            if (esq <= final)
-                dist_esq_calc = calcula_dist(mundo->bases[vetor_bases[esq]]->local_base, local_missao_atual);
-        }
+    int dist_p = calcula_dist(mundo->bases[p]->local_base, Lm);
 
-        /* Recua da direita enquanto distância for maior que o pivô */
-        if (dir > inicio) {
-            dist_dir_calc = calcula_dist(mundo->bases[vetor_bases[dir]]->local_base, local_missao_atual);
-        }
-        while (dir > inicio && dist_dir_calc > dist_pivo_calc) {
-            dir--;
-            if (dir > inicio)
-                dist_dir_calc = calcula_dist(mundo->bases[vetor_bases[dir]]->local_base, local_missao_atual);
-        }
-        
-        /* Troca se os índices não se cruzaram */
-        if (esq < dir) {
-            temp = vetor_bases[esq];
-            vetor_bases[esq] = vetor_bases[dir];
-            vetor_bases[dir] = temp;
-        }
+    while (1) {
+
+        while (i <= fim &&
+            calcula_dist(mundo->bases[v[i]]->local_base, Lm) < dist_p)
+            i++;
+
+        while (j >= ini + 1 &&
+            calcula_dist(mundo->bases[v[j]]->local_base, Lm) > dist_p)
+            j--;
+
+        if (i >= j) break;
+
+        int tmp = v[i];
+        v[i] = v[j];
+        v[j] = tmp;
     }
-    
-    /* Posiciona o pivô no local correto */
-    vetor_bases[inicio] = vetor_bases[dir];
-    vetor_bases[dir] = elemento_pivo;
-    *indice_pivo = dir;
+
+    v[ini] = v[j];
+    v[j] = p;
+    return j;
 }
 
 void quicksort(mundo_t *mundo, missao_t *missao, int dist_missao[], int inicio, int fim) {
-    int pos_pivo;
 
     if (inicio < fim) {
-        Particao(mundo, missao, dist_missao, inicio, fim, &pos_pivo);
+
+        int pos_pivo = Particao(mundo, missao, dist_missao, inicio, fim);
         quicksort(mundo, missao, dist_missao, inicio, pos_pivo - 1);  
         quicksort(mundo, missao, dist_missao, pos_pivo + 1, fim);   
+
     }
 }
 
 
-int valida_base(mundo_t *mundo, int base) {
-
-    if (!mundo)
-        return 0;
-
-    if (base < 0 || base >= mundo->nbases)         // 0 até N-1
-        return 0;
-    
-    if (!mundo->bases[base])                 //Se base existe mas ponteiro é NULL
-        return 0;
-
-    return 1;
-}
 
 int valida_heroi(mundo_t *mundo, int heroi) {
 
@@ -116,19 +84,6 @@ int valida_heroi(mundo_t *mundo, int heroi) {
     return 1;
 }
 
-int valida_fila(mundo_t *mundo, int base) {
-
-    if (!mundo)
-        return 0;
-
-    if (!valida_base(mundo,base)) //verifica se a base existe
-        return 0;
-
-    if (!mundo->bases[base]->espera)    //verifica se fila de espera existe
-        return 0;
-
-    return 1;
-}
 /*---------------------------------------CRIAÇÃO DE EVENTOS-------------------------------------------------*/
 
 void cria_chega(mundo_t *mundo, int heroi, int base, int tempo) {

@@ -47,7 +47,7 @@ void evento_chega(mundo_t *mundo, struct chega *chega) {
     if (!mundo || !chega)
         return;
 
-    if (!valida_heroi(mundo, chega->heroi) || !valida_base(mundo, chega->base))
+    if (!valida_heroi(mundo, chega->heroi))
         return;
 
     mundo->neventos++;
@@ -85,7 +85,7 @@ void evento_espera(mundo_t *mundo, struct espera *espera) {
     if (!mundo || !espera)          //Pra não dar seg fault antes
         return;
 
-    if (!valida_heroi(mundo, espera->heroi) || !valida_base(mundo, espera->base))
+    if (!valida_heroi(mundo, espera->heroi))
         return;
 
     mundo->neventos++;
@@ -110,7 +110,7 @@ void evento_desiste(mundo_t *mundo, struct desiste *desiste) {
     if(!mundo || !desiste)
         return;
 
-    if (!valida_heroi(mundo, desiste->heroi) || !valida_base(mundo, desiste->base))
+    if (!valida_heroi(mundo, desiste->heroi))
         return;
 
     mundo->neventos++;
@@ -127,8 +127,6 @@ void evento_avisa(mundo_t *mundo, struct avisa *avisa) {          //ver se ta ce
     if (!mundo || !avisa)
         return;
 
-     if (!valida_base(mundo, avisa->base))
-        return;
 
     mundo->neventos++;
 
@@ -160,10 +158,11 @@ void evento_entra(mundo_t *mundo, struct entra *entra) {
     if (!mundo || !entra)
         return;
 
-    if (!valida_heroi(mundo,entra->heroi) || !valida_base(mundo,entra->base))
+    if (!valida_heroi(mundo,entra->heroi))
         return;
 
     mundo->neventos++;
+
 
     int tpb = 15 + (mundo->herois[entra->heroi]->paciencia * aleat(1,20));
                     
@@ -180,7 +179,7 @@ void evento_sai(mundo_t *mundo, struct sai *sai) {
     if (!mundo || !sai) 
         return;
 
-     if (!valida_heroi(mundo, sai->heroi) || !valida_base(mundo, sai->base))
+     if (!valida_heroi(mundo, sai->heroi))
         return;
 
     mundo->neventos++;
@@ -199,7 +198,7 @@ void evento_viaja(mundo_t *mundo, struct viaja *viaja) {
     if (!mundo || !viaja)
         return;
 
-    if (!valida_heroi(mundo, viaja->heroi) || !valida_base(mundo, viaja->destino))
+    if (!valida_heroi(mundo, viaja->heroi))
         return;
 
     mundo->neventos++;
@@ -228,7 +227,7 @@ void evento_morre(mundo_t *mundo, struct morre *morre) {
     if (!mundo || !morre)
         return;
 
-    if (!valida_heroi(mundo, morre->heroi) || !valida_base(mundo, morre->base))
+    if (!valida_heroi(mundo, morre->heroi))
         return;
 
     mundo->neventos++;
