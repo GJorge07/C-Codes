@@ -1,5 +1,4 @@
-//Protótipo da chamada do loop dos eventos (conjunto de ações que serão realizadas no mundo)
-
+/*Protótipo da chamada do loop dos eventos (conjunto de ações que serão realizadas no mundo)*/
 #ifndef CHAMA_EVENTOS_H
 #define CHAMA_EVENTOS_H
 
@@ -20,7 +19,6 @@
 #define MISSAO 9 
 #define FIM 10
 
-//Protótipo da lista de eventos futuros, que agenda e processa eventos do mundo ao longo do tempo, LEF
 void chama_eventos(mundo_t *mundo);
 
 #endif

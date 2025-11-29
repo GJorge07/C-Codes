@@ -1,40 +1,25 @@
-//Implementação da função que inicializa(cria) o mundo - cria bases, herois e missoes e seta os valores iniciais.
-//A principio ta certo, testei e ta funcionando sem leak de memoria
-//5 no documento
-
-//includes
+/* Implementação da função que inicializa(cria) o mundo - cria bases, herois e missoes e seta os valores iniciais. */
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>            
+#include <time.h>  
+
 #include "inicia_mundo.h"
 #include "outras_funcoes.h"
 #include "entidades.h"
 
-//defines
-#define T_INICIO 0
-#define T_FIM_DO_MUNDO 525600
-#define N_TAMANHO_MUNDO 20000
-#define N_HABILIDADES 10
-#define N_HEROIS (N_HABILIDADES * 5)
-#define N_BASES (N_HEROIS / 5)
-#define N_MISSOES (T_FIM_DO_MUNDO / 100) 
-#define N_COMPOSTOS_V (N_HABILIDADES * 3)
-
-
-
-//inicializando mundo
+/* inicializando mundo */
  mundo_t *inicia_mundo() {
     mundo_t *mundo;
 
     if (!(mundo = malloc(sizeof(mundo_t))))
         return NULL;
         
-    mundo->lef = fprio_cria();
+    mundo->lef = fprio_cria();  /*cria a lef*/
     if (mundo->lef == NULL)
         return NULL;
 
 
-    //inicializa valores do mundo
+    /* inicializa valores do mundo */
     mundo->relogio = T_INICIO;
     mundo->tamanho_mundo.x = N_TAMANHO_MUNDO;
     mundo->tamanho_mundo.y = N_TAMANHO_MUNDO;
@@ -45,8 +30,8 @@
     mundo->ncompostosv = N_COMPOSTOS_V;
     mundo->neventos = 0;
 
-    //inicializa valores de herois
-    mundo->herois = malloc(sizeof(heroi_t*)*mundo->nherois);      //faz malloc mesmo ou usa cria cjto??????????
+    /* inicializa valores de herois */
+    mundo->herois = malloc(sizeof(heroi_t*)*mundo->nherois); 
 
     if (mundo->herois == NULL) 
         return NULL;
@@ -58,17 +43,17 @@
         if (mundo->herois[i] == NULL) 
             return NULL;
 
-        mundo->herois[i]->vivo = 1;     //inicialmente todos vivos
+        mundo->herois[i]->vivo = 1;    
         mundo->herois[i]->id = i;
-        mundo->herois[i]->base_atual = -1; // ou a base inicial aleatória
+        mundo->herois[i]->base_atual = -1; 
         mundo->herois[i]->paciencia = aleat(0,100);
         mundo->herois[i]->velocidade = aleat(50,5000);
         mundo->herois[i]->experiencia = 0;
         mundo->herois[i]->habilidades = cjto_aleat(aleat(1,3),10);
     }
     
-    //inicializa valores de bases
-    mundo->bases = malloc(sizeof(base_t*)*mundo->nbases);          //faz malloc mesmo ou usa cria cjto??????????
+    /* inicializa valores de bases */
+    mundo->bases = malloc(sizeof(base_t*)*mundo->nbases);          
 
     if (mundo->bases == NULL) 
         return NULL;
@@ -91,9 +76,7 @@
         mundo->bases[i]->espera = fila_cria();
     }
 
-    
-    //Inicializa valores de missões
-
+    /* inicializa valores de missões */
     mundo->missoes = malloc(sizeof(missao_t*)*mundo->nmissoes);  
     
     if (mundo->missoes == NULL) 

@@ -1,22 +1,34 @@
-//Implementação de outras funções utilizadas para a simulação do mundo.
-
-//includes
+/*Implementação de outras funções utilizadas para a simulação do mundo*/
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
 #include "entidades.h"
 #include "eventos.h"
+#include "outras_funcoes.h"
+#include "fprio.h"
+#include "fila.h"
+#include "lista.h"
+#include "conjunto.h"
 
-//outras funções usadas no simulador
+/*---------------------------------------OUTRAS FUNÇÕES UTILIZADAS-------------------------------------------------*/
+
+/* Gera um número aleatório entre min e max*/
 int aleat(int min, int max) {
+
     return min + rand() % (max - min + 1);
+
 }
 
 
 /* Calcula distância euclidiana entre duas localizações */
 int calcula_dist(struct localizacao loc1, struct localizacao loc2) {
+
     int dx, dy;
     dx = loc2.x - loc1.x;
     dy = loc2.y - loc1.y;
     return sqrt(dx * dx + dy * dy);
+
 }
 
 
@@ -72,16 +84,17 @@ int valida_heroi(mundo_t *mundo, int heroi) {
     if (!mundo)
         return 0;
 
-    if (heroi < 0 || heroi >= mundo->nherois)       //0 até N-1
+    if (heroi < 0 || heroi >= mundo->nherois)       
         return 0;
 
-    if (!mundo->herois[heroi])           //Se heroi existe mas ponteiro é NULL
+    if (!mundo->herois[heroi])           /*Se heroi existe mas ponteiro é NULL*/
         return 0;
 
-    if (!mundo->herois[heroi]->vivo)  // herói morto
+    if (!mundo->herois[heroi]->vivo)  /* herói morto */
         return 0;
     
     return 1;
+
 }
 
 /*---------------------------------------CRIAÇÃO DE EVENTOS-------------------------------------------------*/
@@ -97,6 +110,7 @@ void cria_chega(mundo_t *mundo, int heroi, int base, int tempo) {
     chega->tempo = tempo;
 
     fprio_insere(mundo->lef, chega, CHEGA, chega->tempo);
+
 }
 
 void cria_espera(mundo_t *mundo, int tempo, int heroi, int base) {
@@ -110,6 +124,7 @@ void cria_espera(mundo_t *mundo, int tempo, int heroi, int base) {
     espera->base = base;
 
     fprio_insere(mundo->lef, espera, ESPERA, espera->tempo);
+    
 }
 
 void cria_desiste(mundo_t *mundo, int tempo, int heroi, int base) {
@@ -123,6 +138,7 @@ void cria_desiste(mundo_t *mundo, int tempo, int heroi, int base) {
     desiste->base = base;
 
     fprio_insere(mundo->lef, desiste, DESISTE, desiste->tempo);
+
 }
 
 void cria_avisa(mundo_t *mundo, int tempo, int base) {
@@ -135,6 +151,7 @@ void cria_avisa(mundo_t *mundo, int tempo, int base) {
     avisa->base = base;
     
     fprio_insere(mundo->lef, avisa, AVISA, avisa->tempo);
+    
 }
 
 void cria_viaja(mundo_t *mundo, int tempo, int heroi, int base_origem, int destino) {
@@ -163,6 +180,7 @@ void cria_sai(mundo_t *mundo, int tempo, int heroi, int base) {
     sai->base = base;
 
     fprio_insere(mundo->lef, sai, SAI, sai->tempo);
+
 }
 
 void cria_entra(mundo_t *mundo, int tempo, int heroi, int base) {
@@ -176,6 +194,7 @@ void cria_entra(mundo_t *mundo, int tempo, int heroi, int base) {
     entra->base = base;
 
     fprio_insere(mundo->lef, entra, ENTRA, entra->tempo);
+
 }
 
 void cria_morre(mundo_t *mundo, int tempo, int heroi, int base, int missao) {
@@ -190,6 +209,7 @@ void cria_morre(mundo_t *mundo, int tempo, int heroi, int base, int missao) {
     morre->missao = missao;
 
     fprio_insere(mundo->lef, morre, MORRE, morre->tempo);
+
 }
 
 void cria_missao_evento(mundo_t *mundo, int id_missao, int tempo)
@@ -197,9 +217,10 @@ void cria_missao_evento(mundo_t *mundo, int id_missao, int tempo)
     struct evento_missao *ev = malloc(sizeof(struct evento_missao));
     if (!ev) return;
 
-    ev->id = id_missao;          // só guarda o ID da missão
+    ev->id = id_missao;          /*só guarda o ID da missão*/
 
     fprio_insere(mundo->lef, ev, MISSAO, tempo);
+
 }
 
 
@@ -215,8 +236,10 @@ void cria_missao(mundo_t *mundo, int id, struct cjto_t *hab, struct localizacao 
     missao->tempo = tempo;
     missao->cumprida = 0;
 
-     mundo->missoes[id] = missao; //atualiza o vetor de missões
+     mundo->missoes[id] = missao; /*atualiza o vetor de missões*/
+
     fprio_insere(mundo->lef, missao, MISSAO, tempo);
+
 }
 
 
@@ -225,7 +248,7 @@ void cria_missao(mundo_t *mundo, int id, struct cjto_t *hab, struct localizacao 
 void imprime_chega_e_espera(mundo_t *mundo, struct chega *chega) {
 
     printf("%6d: CHEGA HEROI %2d base %d (%2d/%2d) ESPERA\n", chega->tempo, chega->heroi, chega->base,cjto_card(mundo->bases[chega->base]->presentes),(mundo->bases[chega->base]->lotacao)); 
-    //A fila de espera da base que esse herói está indo e capacidade máxima da base - os 2 ultimos
+
 }
 
 void imprime_chega_e_desiste(mundo_t *mundo, struct chega *chega) {
@@ -255,8 +278,7 @@ void imprime_avisa_porteiro(mundo_t *mundo, struct avisa *avisa) {
 
 }
 
-void imprime_avisa_e_admite(struct avisa *avisa, int heroi_removido) {    //como faz o heroi removido ?
-
+void imprime_avisa_e_admite(struct avisa *avisa, int heroi_removido) { 
     printf("%6d: AVISA PORTEIRO BASE %d ADMITE %2d\n", avisa->tempo, avisa->base, heroi_removido);
 
 }
@@ -281,6 +303,6 @@ void imprime_viaja(mundo_t *mundo, struct viaja *viaja, int distancia, int durac
 
 void imprime_morre(struct morre *morre) {
 
-    printf("%6d: MORRE HEROI %2d MISSAO %d\n", morre->tempo, morre->heroi, morre->missao);   //ver se esse missao ta certo, add no eventos.h agr
+    printf("%6d: MORRE HEROI %2d MISSAO %d\n", morre->tempo, morre->heroi, morre->missao);
 
 }

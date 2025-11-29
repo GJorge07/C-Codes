@@ -1,7 +1,10 @@
-//Protótipos de outras funções utilizadas para realizar a simulação do mundo.
-
+/*Protótipos de outras funções utilizadas para realizar a simulação do mundo*/
 #ifndef OUTRAS_FUNCOES_H
 #define OUTRAS_FUNCOES_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
 #include "entidades.h"
 #include "eventos.h"
@@ -10,7 +13,7 @@ int aleat(int min, int max);
 
 int calcula_dist(struct localizacao loc1, struct localizacao loc2);
 
-void Particao(mundo_t *mundo, missao_t *missao, int vetor_bases[], int inicio, int final, int *indice_pivo);
+int Particao(mundo_t *mundo, missao_t *missao, int v[], int ini, int fim);
 
 void quicksort(mundo_t *mundo, missao_t *missao, int dist_missao[], int inicio, int fim);
 
@@ -55,10 +58,5 @@ void imprime_sai(mundo_t *mundo, struct sai *sai);
 void imprime_viaja(mundo_t *mundo, struct viaja *viaja, int distancia, int duracao);
 
 void imprime_morre(struct morre *morre);
-
-
-/*As funções de imprimir missão e imprimir fim deixei para colocar no eventos pois são mais complexas*/
-
-//Outras funções usadas em eventos.c????
 
 #endif

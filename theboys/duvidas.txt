@@ -1,13 +1,6 @@
-1. onde vai o eventos iniciais (6) ?   ok!
-2. Oq são as mensagens de depuração no final da 7.9
-8.falta o missao e o morre
+
 9.ver os comentarios com duvidas em cada evento
-14. ver se deixo ou n o valida heroi, valida base e valida fila.... q erro q tenho q conferir ????  mandei p castilho
-16. ver cria missao
-17.arrumar tempo fim do mundo no final!!!!
 18.arrumar comentarios em tudo
-19.base origem no cria viaja do evento desiste e evento sai e evento viaja ????
-20.dando problema na impressao das missoes
 
 
 theboys.c

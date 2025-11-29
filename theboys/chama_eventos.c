@@ -1,25 +1,29 @@
-//Implementação do loop principal da simulação -> pega o evento, lê o tiṕo, chama a função e repete até acabar (FIM)
+/* Implementação do loop principal da simulação -> pega o evento, lê o tiṕo, chama a função e repete até acabar (FIM) */
+#include <stdio.h>
+#include <stdlib.h>
 
-//includes
+#include "entidades.h"
 #include "chama_eventos.h"
 #include "eventos.h"
+#include "fprio.h"
+
 
 void chama_eventos(mundo_t *mundo) {
 
     int continuar = 1;
 
-    while (continuar && fprio_tamanho(mundo->lef) > 0) {        //enquanto continuar for 1 e tiver evento na lef
+    while (continuar && fprio_tamanho(mundo->lef) > 0) {        
 
-        int tipo, prio;
-        void *item_escolhido = fprio_retira(mundo->lef, &tipo, &prio); //VOIDDD????   //item_escolhido é o evento retirado da lef
+        int tipo, prio;         /*prio representa o tempo que o evento ocorre*/
+        void *item_escolhido = fprio_retira(mundo->lef, &tipo, &prio); /* item_escolhido é o evento retirado da lef */
 
         if (item_escolhido == NULL) 
             break;
 
-         mundo->relogio = prio;            //fiz pq do chat, n sei c ta certo
+         mundo->relogio = prio;            
 
-        switch (tipo) {                        //verifica o tipo do evento e chama a função correspondente
-
+        switch (tipo) {                        /* verifica o tipo do evento e chama a função correspondente */
+            
             case CHEGA:
                 evento_chega(mundo, (struct chega*)item_escolhido);
                 break;
@@ -54,18 +58,20 @@ void chama_eventos(mundo_t *mundo) {
 
             case MISSAO: {
                 int id = ((struct evento_missao*)item_escolhido)->id;
-                missao_t *m = mundo->missoes[id];        // pega a missão real
-                evento_missao(mundo, m);                 // executa
+                missao_t *m = mundo->missoes[id];        /* pega a missão real */
+                evento_missao(mundo, m);                 
                 break;
             }
 
 
             case FIM:
                 evento_fim(mundo, (struct fim*)item_escolhido);
-                continuar = 0;   // encerra o while
+                continuar = 0; 
                 break;
         }
 
-        free(item_escolhido);  //toda vez que um evento é processado, libera a memória alocada para ele, pois ele sai da fprio e fica "perdido"
+        /* toda vez que um evento é processado, libera a memória alocada para ele, pois ele sai da fprio e fica "perdido" */
+        free(item_escolhido);  
+    
     }
 }

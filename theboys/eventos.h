@@ -1,5 +1,4 @@
-//Implementação dos protótipos das funções dos possíveis eventos no mundo
-
+/*Implementação dos protótipos das funções dos possíveis eventos no mundo*/
 #ifndef EVENTOS_H
 #define EVENTOS_H
 
@@ -10,7 +9,6 @@
 
 
 /*Definidos assim principalmente para facilitar no switch case do chama_eventos*/
-
 #define CHEGA 1
 #define ESPERA 2
 #define DESISTE 3
@@ -88,7 +86,9 @@ struct morre {
 };
 
 struct evento_missao {
-    int id;   // ID da missão do mundo
+
+    int id;   /*ID da missão do mundo*/ 
+
 };
 
 
@@ -110,7 +110,7 @@ struct evento_t {
 };
 
 /*funções que implementam a lógica de cada evento.*/
-/*mundo_t *mundo é o estado global da simulação e evento_t *evento é o evento que está sendo feito*/
+/*mundo_t *mundo é o estado global da simulação*/
 
 void eventos_iniciais(mundo_t *mundo);
 
