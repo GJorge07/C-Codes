@@ -192,21 +192,33 @@ void cria_morre(mundo_t *mundo, int tempo, int heroi, int base, int missao) {
     fprio_insere(mundo->lef, morre, MORRE, morre->tempo);
 }
 
+void cria_missao_evento(mundo_t *mundo, int id_missao, int tempo)
+{
+    struct evento_missao *ev = malloc(sizeof(struct evento_missao));
+    if (!ev) return;
+
+    ev->id = id_missao;          // só guarda o ID da missão
+
+    fprio_insere(mundo->lef, ev, MISSAO, tempo);
+}
+
+
 void cria_missao(mundo_t *mundo, int id, struct cjto_t *hab, struct localizacao local, int tempo) {
 
-        struct missao *missao;
-        if (!(missao = malloc(sizeof(struct missao))))
-            return;
+    missao_t *missao = malloc(sizeof(missao_t));
+    if (!missao) return;
 
-        missao->id = id;
-        missao->habilidades_missao = hab;
-        missao->local_missao = local;
-        missao->tentativas = 0;
-        missao->tempo = tempo;
-        missao->ncumpridas = 0;
+    missao->id = id;
+    missao->habilidades_missao = hab;
+    missao->local_missao = local;
+    missao->tentativas = 0;
+    missao->tempo = tempo;
+    missao->cumprida = 0;
 
-        fprio_insere(mundo->lef, missao, MISSAO, tempo);
+     mundo->missoes[id] = missao; //atualiza o vetor de missões
+    fprio_insere(mundo->lef, missao, MISSAO, tempo);
 }
+
 
 /*---------------------------------------PRINTF DAS FUNÇÕES------------------------------------------------*/
 
@@ -236,7 +248,7 @@ void imprime_desiste(struct desiste *desiste) {
 
 void imprime_avisa_porteiro(mundo_t *mundo, struct avisa *avisa) {
 
-    printf("%6d: AVISA  PORTEIRO BASE %d (%2d/%2d)\n", avisa->tempo, avisa->base, cjto_card(mundo->bases[avisa->base]->presentes), mundo->bases[avisa->base]->lotacao);
+    printf("%6d: AVISA  PORTEIRO BASE %d (%2d/%2d)", avisa->tempo, avisa->base, cjto_card(mundo->bases[avisa->base]->presentes), mundo->bases[avisa->base]->lotacao);
         printf("FILA [ ");
         fila_imprime(mundo->bases[avisa->base]->espera);
         printf(" ]\n");

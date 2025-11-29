@@ -13,34 +13,39 @@
 #include "chama_eventos.h"
 
 //defines
-#define T_FIM_DO_MUNDO 50000
+#define T_FIM_DO_MUNDO 525600
 
 void eventos_iniciais(mundo_t *mundo) {
 
-    int base, tempo1, tempo2;
+    int base, tempo_h, tempo_m;
 
-    
+    // Eventos CHEGA (um por herói)
     for (int i = 0; i < mundo->nherois; i++) {
 
         base = aleat(0, mundo->nbases - 1);
-        tempo1 = aleat(0, 4321);
-        cria_chega(mundo, i, base, tempo1);         //i sao os herois
-    }
-    
-    for (int j = 0; j < mundo->nmissoes; j++) {
-        
-        tempo2 = aleat(0, T_FIM_DO_MUNDO);
-        cria_missao(mundo,j,mundo->missoes[j]->habilidades_missao,mundo->missoes[j]->local_missao,tempo2);
-    }
-    
-    //para o fim, não fiz cria_fim!!!!!!!
-    struct fim *fim;
-	if (!(fim = malloc(sizeof(struct fim))))
-		return; 
-	fim->tempo = T_FIM_DO_MUNDO;
+        tempo_h = aleat(0, 4321);
 
-	fprio_insere(mundo->lef, fim, FIM, T_FIM_DO_MUNDO);
+        cria_chega(mundo, i, base, tempo_h);
+    }
+
+    // Eventos de MISSÃO (um por missão)
+    for (int j = 0; j < mundo->nmissoes; j++) {
+
+        tempo_m = aleat(0, T_FIM_DO_MUNDO);
+
+        // Aqui chamamos a versão corrigida
+        cria_missao_evento(mundo, j, tempo_m);
+    }
+
+    // Evento FIM
+    struct fim *fim = malloc(sizeof(struct fim));
+    if (!fim) return;
+
+    fim->tempo = T_FIM_DO_MUNDO;
+
+    fprio_insere(mundo->lef, fim, FIM, T_FIM_DO_MUNDO);
 }
+
 
 void evento_chega(mundo_t *mundo, struct chega *chega) {
 
@@ -102,7 +107,6 @@ void evento_espera(mundo_t *mundo, struct espera *espera) {
     
     cria_avisa(mundo, espera->tempo, espera->base);
 
-
 }
 
 void evento_desiste(mundo_t *mundo, struct desiste *desiste) {
@@ -115,7 +119,7 @@ void evento_desiste(mundo_t *mundo, struct desiste *desiste) {
 
     mundo->neventos++;
 
-    int destino = aleat(0, mundo->nbases - 1);    // precisa do -1??
+    int destino = aleat(0, mundo->nbases - 1);  
 
     cria_viaja(mundo, desiste->tempo, desiste->heroi, desiste->base, destino);
 
@@ -242,187 +246,153 @@ void evento_morre(mundo_t *mundo, struct morre *morre) {
 }
 
 void evento_missao(mundo_t *mundo, struct missao *missao) {
+
+    if (!mundo || !missao)
+        return;
     
-    int dist_missao[mundo->nbases];         //id das bases
     
     mundo->neventos++;
-
     missao->tentativas++;
 
-    printf("%6d: MISSAO %d TENT %d HAB REQ: [ ",mundo->relogio,missao->id,missao->tentativas);
+    printf("%6d: MISSAO %d TENT %d HAB REQ: [ ", mundo->relogio, missao->id, missao->tentativas);
     cjto_imprime(missao->habilidades_missao);
     printf(" ]\n");
 
-    //inicia o vetor
-    for (int i = 0; i < mundo->nbases; i++ ) 
-            dist_missao[i] = i;
-    
-    //ordena o vetor com ordem crescente de distância
-    quicksort(mundo,missao,dist_missao,0,mundo->nbases - 1);
+    // vetor com ids das bases
+    int dist_missao[mundo->nbases];
+    for (int i = 0; i < mundo->nbases; i++)
+        dist_missao[i] = i;
 
-    //bmp (percorre o vetor e ve se a base pode cumprir a missão)
+    // ordena vetor por distância da missão
+    quicksort(mundo, missao, dist_missao, 0, mundo->nbases - 1);
 
     int bmp = -1;
+    struct cjto_t *hab_base = NULL;
 
+    // percorre bases para ver se alguma cumpre a missão
     for (int i = 0; i < mundo->nbases; i++) {
-
         int base_id = dist_missao[i];
+        base_t *b = mundo->bases[base_id];
 
-        if (cjto_card(mundo->bases[base_id]->presentes) == 0)      //se quantidade de herois na base for 0, pula
+        if (cjto_card(b->presentes) == 0)
             continue;
 
-        printf("%6d: MISSAO %d BASE %d DIST %d HEROIS [ ",mundo->relogio,missao->id,mundo->bases[base_id]->id,calcula_dist(missao->local_missao,mundo->bases[base_id]->local_base));
-        cjto_imprime(mundo->bases[base_id]->presentes);
+        printf("%6d: MISSAO %d BASE %d DIST %d HEROIS [ ", mundo->relogio, missao->id, b->id,
+               calcula_dist(b->local_base, missao->local_missao));
+        cjto_imprime(b->presentes);
         printf(" ]\n");
 
-        struct cjto_t *hab_uniao = cjto_cria(mundo->nhabilidades);
-        if (hab_uniao == NULL)
-            continue;
-
-        for (int j = 0; j < mundo->nherois; j++) {
-
-            if (cjto_pertence(mundo->bases[base_id]->presentes, j)) {
-
-                printf("%6d: MISSAO %d HAB HEROI %2d: [ ",mundo->relogio,missao->id,mundo->herois[j]->id);
-                cjto_imprime(mundo->herois[j]->habilidades);
+        hab_base = cjto_cria(mundo->nhabilidades);
+        for (int h = 0; h < mundo->nherois; h++) {
+            if (cjto_pertence(b->presentes, h)) {
+                printf("%6d: MISSAO %d HAB HEROI %2d: [ ", mundo->relogio, missao->id, h);
+                cjto_imprime(mundo->herois[h]->habilidades);
                 printf(" ]\n");
 
-                struct cjto_t *hab_nova = cjto_uniao(hab_uniao, mundo->herois[j]->habilidades);
-                cjto_destroi(hab_uniao);
-                hab_uniao = hab_nova;
-            }
-    }
-
-
-        printf("%6d: MISSAO %d UNIAO HAB BASE %d: [ ",mundo->relogio,missao->id,mundo->bases[base_id]->id);
-        cjto_imprime(hab_uniao);
-        printf(" ]\n");
-
-    int base_cumpre = cjto_contem(hab_uniao, missao->habilidades_missao);   //base pode cumprir missao
-
-    if (base_cumpre) {
-        bmp = base_id;
-        cjto_destroi(hab_uniao);
-        break;
-    }
-
-    cjto_destroi(hab_uniao);
-    hab_uniao = NULL;
-}
-
-
-//Achou bmp, incrementa xp dos herois presentes na base
-    if (bmp >=0) {
-        
-        missao->ncumpridas++;   // missão cumprida
-        mundo->bases[bmp]->missoes_cumpridas++;    //base cumpriu mais uma missão
-
-        /* recria união das habilidades para impressão */
-        struct cjto_t *hab_final = cjto_cria(mundo->nhabilidades);
-        for (int h = 0; h < mundo->nherois; h++) {
-            if (cjto_pertence(mundo->bases[bmp]->presentes, h)) {
-                struct cjto_t *temp = cjto_uniao(hab_final, mundo->herois[h]->habilidades);
-                cjto_destroi(hab_final);
-                hab_final = temp;
+                struct cjto_t *temp = cjto_uniao(hab_base, mundo->herois[h]->habilidades);
+                cjto_destroi(hab_base);
+                hab_base = temp;
             }
         }
 
-        printf("%6d: MISSAO %d CUMPRIDA BASE %d HABS: [ ",mundo->relogio,missao->id,bmp);
-        cjto_imprime(hab_final);
+        printf("%6d: MISSAO %d UNIAO HAB BASE %d: [ ", mundo->relogio, missao->id, b->id);
+        cjto_imprime(hab_base);
         printf(" ]\n");
 
-        cjto_destroi(hab_final);
+        if (cjto_contem(hab_base, missao->habilidades_missao)) {
+            bmp = base_id;
+            break;
+        }
 
-    // incrementa exp
-        for (int h = 0; h < mundo->nherois; h++) {
+        cjto_destroi(hab_base);
+        hab_base = NULL;
+    }
+
+    // missão cumprida normalmente
+    if (bmp >= 0) {
+        missao->cumprida = 1;
+        mundo->bases[bmp]->missoes_cumpridas++;
+
+        printf("%6d: MISSAO %d CUMPRIDA BASE %d HABS: [ ", mundo->relogio, missao->id, bmp);
+        cjto_imprime(hab_base);
+        printf(" ]\n");
+
+        for (int h = 0; h < mundo->nherois; h++)
             if (cjto_pertence(mundo->bases[bmp]->presentes, h))
                 mundo->herois[h]->experiencia++;
-        }
+
+        cjto_destroi(hab_base);
         return;
     }
 
-    /* quando não achou BMP, verifica possibilidade de usar compostoV */
+    // quando não achou BMP, verifica possibilidade de usar Composto V
     if (mundo->ncompostosv > 0 && mundo->relogio % 2500 == 0) {
-        
-        /* encontra primeira base não vazia no vetor ordenado por distância */
         int base_mais_proxima = -1;
-        for (int k = 0; k < mundo->nbases; k++) {
-            if (cjto_card(mundo->bases[dist_missao[k]]->presentes) > 0) {
-                base_mais_proxima = dist_missao[k];
+        for (int i = 0; i < mundo->nbases; i++) {
+            if (cjto_card(mundo->bases[dist_missao[i]]->presentes) > 0) {
+                base_mais_proxima = dist_missao[i];
                 break;
             }
         }
-        
-        /* se não encontrou nenhuma base com heróis, missão impossível */
-        if (base_mais_proxima == -1) {
-            printf("%6d: MISSAO %d IMPOSSIVEL\n", mundo->relogio, missao->id);
-            cria_missao(mundo, missao->id, missao->habilidades_missao, missao->local_missao, mundo->relogio + 24*60);
-            return;
-        }
-        
-        /* procura herói com maior experiência na base mais próxima */
-        int heroi_veterano = -1;
-        int experiencia_maxima = -1;
-        int encontrou_veterano = 0;
-        
-        for (int h = 0; h < mundo->nherois; h++) {
-            if (cjto_pertence(mundo->bases[base_mais_proxima]->presentes, h)) {
-                if (mundo->herois[h]->experiencia > experiencia_maxima) {
-                    experiencia_maxima = mundo->herois[h]->experiencia;
+
+        if (base_mais_proxima != -1) {
+            int heroi_veterano = -1, maior_xp = -1;
+            for (int h = 0; h < mundo->nherois; h++) {
+                if (cjto_pertence(mundo->bases[base_mais_proxima]->presentes, h) &&
+                    mundo->herois[h]->experiencia > maior_xp) {
+                    maior_xp = mundo->herois[h]->experiencia;
                     heroi_veterano = h;
-                    encontrou_veterano = 1;
                 }
+            }
+
+            if (heroi_veterano >= 0) {
+                mundo->ncompostosv--;
+                missao->cumprida = 1;
+                mundo->bases[base_mais_proxima]->missoes_cumpridas++;
+
+                hab_base = cjto_cria(mundo->nhabilidades);
+                for (int h = 0; h < mundo->nherois; h++) {
+                    if (cjto_pertence(mundo->bases[base_mais_proxima]->presentes, h)) {
+                        struct cjto_t *temp = cjto_uniao(hab_base, mundo->herois[h]->habilidades);
+                        cjto_destroi(hab_base);
+                        hab_base = temp;
+                    }
+                }
+                struct cjto_t *hab_final_v = cjto_uniao(hab_base, missao->habilidades_missao);
+
+                printf("%6d: MISSAO %d CUMPRIDA BASE %d HABS: [ ", mundo->relogio, missao->id, base_mais_proxima);
+                cjto_imprime(hab_final_v);
+                printf(" ]\n");
+
+                cjto_destroi(hab_base);
+                cjto_destroi(hab_final_v);
+
+                // cria evento MORRE
+                struct morre *evento = malloc(sizeof(struct morre));
+                evento->tempo = mundo->relogio;
+                evento->heroi = heroi_veterano;
+                evento->base = base_mais_proxima;
+                evento->missao = missao->id;
+                fprio_insere(mundo->lef, evento, MORRE, evento->tempo);
+
+                for (int h = 0; h < mundo->nherois; h++) {
+                    if (h != heroi_veterano &&
+                        cjto_pertence(mundo->bases[base_mais_proxima]->presentes, h))
+                        mundo->herois[h]->experiencia++;
+                }
+
+                return;
             }
         }
-        
-        /* se encontrou um herói veterano, usa composto V */
-        if (encontrou_veterano) {
-            mundo->ncompostosv--;                    // usa um composto V
-            missao->ncumpridas++;                    // marca missão como cumprida
-            mundo->bases[base_mais_proxima]->missoes_cumpridas++;  // base cumpriu missão
-            
-            //print - missao cumprida compostoV
-            
-            printf("%6d: MISSAO %d CUMPRIDA BASE %d HABS: [ ",mundo->relogio,missao->id,base_mais_proxima);
-            
-            /* recria união para impressão */
-            struct cjto_t *hab_compostoV = cjto_cria(mundo->nhabilidades);
-            for (int h = 0; h < mundo->nherois; h++) {
-                if (cjto_pertence(mundo->bases[base_mais_proxima]->presentes, h)) {
-                    struct cjto_t *temp = cjto_uniao(hab_compostoV, mundo->herois[h]->habilidades);
-                    cjto_destroi(hab_compostoV);
-                    hab_compostoV = temp;
-                }
-            }
-            /* adiciona habilidades da missão (efeito do compostoV) */
-            struct cjto_t *hab_final_v = cjto_uniao(hab_compostoV, missao->habilidades_missao);
-            cjto_imprime(hab_final_v);
-            printf(" ]\n");
-            
-            cjto_destroi(hab_compostoV);
-            cjto_destroi(hab_final_v);
-
-            /* para o herói mais experiente (H): cria e insere na LEF o evento MORRE (agora, H) */
-            cria_morre(mundo, mundo->relogio, heroi_veterano, base_mais_proxima, missao->id);
-
-            /* incrementa a experiência dos demais heróis presentes na BMP */
-            for (int h = 0; h < mundo->nherois; h++) {
-                if (cjto_pertence(mundo->bases[base_mais_proxima]->presentes, h) && h != heroi_veterano) {
-                    mundo->herois[h]->experiencia++;
-                }
-            }
-
-            //imprime_missao_cumprida_compostoV(mundo, missao, base_mais_proxima, heroi_veterano);
-        } else {
-            printf("%6d: MISSAO %d IMPOSSIVEL\n", mundo->relogio, missao->id);
-            cria_missao(mundo, missao->id, missao->habilidades_missao, missao->local_missao, mundo->relogio + 1440);
-        }
-    } else {
-        /* PRINT OBRIGATÓRIO - missão impossível */
-        printf("%6d: MISSAO %d IMPOSSIVEL\n", mundo->relogio, missao->id);
-        cria_missao(mundo, missao->id, missao->habilidades_missao, missao->local_missao, mundo->relogio + 1440);
     }
+
+    // missão impossível, reagendar para o dia seguinte
+    printf("%6d: MISSAO %d IMPOSSIVEL\n", mundo->relogio, missao->id);
+    struct evento_missao *novo_ev = malloc(sizeof(struct evento_missao));
+    novo_ev->id = missao->id;
+    fprio_insere(mundo->lef, novo_ev, MISSAO, mundo->relogio + 1440);
 }
+
 
 void evento_fim(mundo_t *mundo, struct fim *fim) {
     
@@ -466,7 +436,7 @@ void evento_fim(mundo_t *mundo, struct fim *fim) {
     int soma_tentativas = 0;
 
     for (int i = 0; i < mundo->nmissoes; i++) {
-        if (mundo->missoes[i]->ncumpridas > 0) {
+        if (mundo->missoes[i]->cumprida == 1) {
             missoes_cumpridas++;
         }
         

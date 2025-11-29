@@ -32,6 +32,8 @@ void cria_entra(mundo_t *mundo, int tempo, int heroi, int base);
 
 void cria_morre(mundo_t *mundo, int tempo, int heroi, int base, int missao);
 
+void cria_missao_evento(mundo_t *mundo, int id_missao, int tempo);
+
 void cria_missao(mundo_t *mundo, int id, struct cjto_t *hab, struct localizacao local, int tempo);
 
 void imprime_chega_e_espera(mundo_t *mundo, struct chega *chega);

@@ -17,7 +17,7 @@
 
 
 #define T_INICIO 0
-#define T_FIM_DO_MUNDO 50000         //525600                  
+#define T_FIM_DO_MUNDO 525600               
 #define N_TAMANHO_MUNDO 20000
 #define N_HABILIDADES 10
 #define N_HEROIS (N_HABILIDADES * 5)

@@ -87,12 +87,10 @@ struct morre {
 
 };
 
-struct missao_ev {
-
-    int tempo;
-    int missao;
-
+struct evento_missao {
+    int id;   // ID da missão do mundo
 };
+
 
 struct fim {
 
@@ -135,6 +133,5 @@ void evento_morre(mundo_t *mundo, struct morre *morre);
 void evento_missao(mundo_t *mundo, struct missao *missao);
 
 void evento_fim(mundo_t *mundo, struct fim *fim);
-
 
 #endif

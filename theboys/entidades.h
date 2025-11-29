@@ -26,7 +26,8 @@ struct heroi {
     int velocidade;
     int experiencia;
     int base_atual;   
-    int vivo;  //1 vivo e 0 morto      
+    int vivo;  //1 vivo e 0 morto   
+       
 };
 
 struct base {
@@ -46,7 +47,7 @@ struct missao {
     int id;
     struct cjto_t *habilidades_missao;
     struct localizacao local_missao;
-    int ncumpridas;  
+    int cumprida;  
     int tentativas;
     int tempo;
 

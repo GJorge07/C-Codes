@@ -8,10 +8,11 @@
 #include <time.h>            
 #include "inicia_mundo.h"
 #include "outras_funcoes.h"
+#include "entidades.h"
 
 //defines
 #define T_INICIO 0
-#define T_FIM_DO_MUNDO 50000
+#define T_FIM_DO_MUNDO 525600
 #define N_TAMANHO_MUNDO 20000
 #define N_HABILIDADES 10
 #define N_HEROIS (N_HABILIDADES * 5)
@@ -59,6 +60,7 @@
 
         mundo->herois[i]->vivo = 1;     //inicialmente todos vivos
         mundo->herois[i]->id = i;
+        mundo->herois[i]->base_atual = -1; // ou a base inicial aleatória
         mundo->herois[i]->paciencia = aleat(0,100);
         mundo->herois[i]->velocidade = aleat(50,5000);
         mundo->herois[i]->experiencia = 0;
@@ -85,7 +87,7 @@
         mundo->bases[i]->local_base.x = aleat(0,N_TAMANHO_MUNDO);
         mundo->bases[i]->local_base.y = aleat(0,N_TAMANHO_MUNDO);
 
-        mundo->bases[i]->presentes = cjto_cria(mundo->bases[i]->lotacao);      
+        mundo->bases[i]->presentes = cjto_cria(mundo->nherois);      
         mundo->bases[i]->espera = fila_cria();
     }
 
@@ -104,9 +106,8 @@
             return NULL;
         
         mundo->missoes[i]->id = i;
-        mundo->missoes[i]->ncumpridas = 0;
+        mundo->missoes[i]->cumprida = 0;
         mundo->missoes[i]->tentativas = 0;
-        mundo->missoes[i]->tempo = 0;
         mundo->missoes[i]->local_missao.x = aleat(0,N_TAMANHO_MUNDO);
         mundo->missoes[i]->local_missao.y = aleat(0,N_TAMANHO_MUNDO);
         mundo->missoes[i]->habilidades_missao = cjto_aleat(aleat(6,10),10);

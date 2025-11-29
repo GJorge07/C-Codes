@@ -8,7 +8,7 @@
 18.arrumar comentarios em tudo
 19.base origem no cria viaja do evento desiste e evento sai e evento viaja ????
 20.dando problema na impressao das missoes
-21.conferir onde tem numero de algo - 1 se é -1 msm 
+
 
 theboys.c
   inicia_mundo.c/h     → cria mundo

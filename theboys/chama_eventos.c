@@ -52,9 +52,13 @@ void chama_eventos(mundo_t *mundo) {
                 evento_morre(mundo, (struct morre*)item_escolhido);
                 break;
 
-            case MISSAO:
-                evento_missao(mundo, (struct missao*)item_escolhido);
+            case MISSAO: {
+                int id = ((struct evento_missao*)item_escolhido)->id;
+                missao_t *m = mundo->missoes[id];        // pega a missão real
+                evento_missao(mundo, m);                 // executa
                 break;
+            }
+
 
             case FIM:
                 evento_fim(mundo, (struct fim*)item_escolhido);
