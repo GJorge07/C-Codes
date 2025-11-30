@@ -1,43 +1,43 @@
-//Implementação dos diversos tipos de eventos que podem acontecer no mundo.
+/*Implementação dos diversos tipos de eventos que podem acontecer no mundo.*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>       /*pra usar o int max no evento fim*/
+#include <math.h>
 
-//4 no documento - usar fila de prioridade
-
-//includes - falta mais
 #include "entidades.h"
 #include "eventos.h"
 #include "outras_funcoes.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>       //pra usar o int max no evento fim
-#include <math.h>
 #include "chama_eventos.h"
+#include "fprio.h"
+#include "fila.h"
+#include "lista.h"
+#include "conjunto.h"
 
-//defines
 #define T_FIM_DO_MUNDO 525600
 
 void eventos_iniciais(mundo_t *mundo) {
 
     int base, tempo_h, tempo_m;
 
-    // Eventos CHEGA (um por herói)
+    /*Evento de CHEGADA*/
     for (int i = 0; i < mundo->nherois; i++) {
 
         base = aleat(0, mundo->nbases - 1);
         tempo_h = aleat(0, 4321);
 
         cria_chega(mundo, i, base, tempo_h);
+
     }
 
-    // Eventos de MISSÃO (um por missão)
+    /* Eventos de MISSÃO */
     for (int j = 0; j < mundo->nmissoes; j++) {
 
         tempo_m = aleat(0, T_FIM_DO_MUNDO);
 
-        // Aqui chamamos a versão corrigida
         cria_missao_evento(mundo, j, tempo_m);
-    }
 
-    // Evento FIM
+    }
+    /* Evento de FIM DO MUNDO */
     struct fim *fim = malloc(sizeof(struct fim));
     if (!fim) return;
 
@@ -55,39 +55,41 @@ void evento_chega(mundo_t *mundo, struct chega *chega) {
     if (!valida_heroi(mundo, chega->heroi))
         return;
 
-    mundo->neventos++;
+    mundo->neventos++;             /*incrementa o número de eventos*/
 
     int espera;
 
-    int lot = mundo->bases[chega->base]->lotacao;          //vagas em B
-    int h = cjto_card(mundo->bases[chega->base]->presentes);   //herois presentes na base
+    int lot = mundo->bases[chega->base]->lotacao;          /*vagas em B*/
+    int h = cjto_card(mundo->bases[chega->base]->presentes);   /*herois presentes na base*/
     int tam_fila = fila_tamanho(mundo->bases[chega->base]->espera);
 
 
     mundo->herois[chega->heroi]->base_atual = chega->base;
 
-    if (tam_fila == 0 && h < lot )       //se há vagas em B e a fila de espera em B está vazia
+    if (tam_fila == 0 && h < lot )       
         espera = 1;
     else 
         espera = mundo->herois[chega->heroi]->paciencia > (10 * tam_fila);
-    
 
     if (espera) {
+
         imprime_chega_e_espera(mundo, chega);
         cria_espera(mundo, chega->tempo, chega->heroi, chega->base);
         
     }
 
     else {
+
         imprime_chega_e_desiste(mundo, chega);
         cria_desiste(mundo, chega->tempo, chega->heroi, chega->base);
+
     }
 }
 
-//heroi entra na fila de espera e porteiro é avisado
+
 void evento_espera(mundo_t *mundo, struct espera *espera) {
 
-    if (!mundo || !espera)          //Pra não dar seg fault antes
+    if (!mundo || !espera)         
         return;
 
     if (!valida_heroi(mundo, espera->heroi))
@@ -97,13 +99,12 @@ void evento_espera(mundo_t *mundo, struct espera *espera) {
     
     imprime_espera(mundo, espera);
 
-    fila_insere(mundo->bases[espera->base]->espera, espera->heroi);     //insere heroi na base B
+    fila_insere(mundo->bases[espera->base]->espera, espera->heroi);     /*insere heroi na base B*/
 
-    // ATUALIZAR fila_max após inserção
+    /* atualizar fila_max após inserção */
     int tamanho_atual = fila_tamanho(mundo->bases[espera->base]->espera);
-    if (tamanho_atual > mundo->bases[espera->base]->fila_max) {
+    if (tamanho_atual > mundo->bases[espera->base]->fila_max) 
         mundo->bases[espera->base]->fila_max = tamanho_atual;
-    }
     
     cria_avisa(mundo, espera->tempo, espera->base);
 
@@ -124,6 +125,7 @@ void evento_desiste(mundo_t *mundo, struct desiste *desiste) {
     cria_viaja(mundo, desiste->tempo, desiste->heroi, desiste->base, destino);
 
     imprime_desiste(desiste);
+
 }
 
 void evento_avisa(mundo_t *mundo, struct avisa *avisa) {          //ver se ta certo o loop
@@ -131,29 +133,29 @@ void evento_avisa(mundo_t *mundo, struct avisa *avisa) {          //ver se ta ce
     if (!mundo || !avisa)
         return;
 
-
     mundo->neventos++;
 
-    int b = mundo->bases[avisa->base]->lotacao;          //vagas em B
-    int h = cjto_card(mundo->bases[avisa->base]->presentes);   //herois presentes na base
+    int b = mundo->bases[avisa->base]->lotacao;         
+    int h = cjto_card(mundo->bases[avisa->base]->presentes);  
     int tam_fila = fila_tamanho(mundo->bases[avisa->base]->espera);
 
     imprime_avisa_porteiro(mundo, avisa);
 
-    while (tam_fila > 0 && b > h ) {            //n tenho ctz q ta certo
+    while (tam_fila > 0 && b > h ) {            
 
         int heroi_removido;
 
-        fila_retira(mundo->bases[avisa->base]->espera, &heroi_removido);         //retira primeiro heroi da fila
-        cjto_insere(mundo->bases[avisa->base]->presentes, heroi_removido);       //insere heroi na fila
+        fila_retira(mundo->bases[avisa->base]->espera, &heroi_removido);         /*retira primeiro heroi da fila*/
+        cjto_insere(mundo->bases[avisa->base]->presentes, heroi_removido);       /*insere heroi na fila*/
 
 
         imprime_avisa_e_admite(avisa,heroi_removido);
 
         cria_entra(mundo, avisa->tempo, heroi_removido, avisa->base);
 
-        h = cjto_card(mundo->bases[avisa->base]->presentes);   //herois presentes na base
+        h = cjto_card(mundo->bases[avisa->base]->presentes);   /*atualiza numero de herois na base*/
         tam_fila = fila_tamanho(mundo->bases[avisa->base]->espera);
+
     }
 }
 
@@ -174,7 +176,7 @@ void evento_entra(mundo_t *mundo, struct entra *entra) {
 
     int tempo_sai = entra->tempo + tpb;
 
-    imprime_entra(mundo, entra, tempo_sai);             //ver se é entra + tpb mesmo
+    imprime_entra(mundo, entra, tempo_sai);             
 
 }
 
@@ -188,13 +190,14 @@ void evento_sai(mundo_t *mundo, struct sai *sai) {
 
     mundo->neventos++;
 
-    cjto_retira(mundo->bases[sai->base]->presentes, sai->heroi);    //retira o heroi do conjunto de herois em B
-    int destino = aleat(0, mundo->nbases-1);    //escolhe base aleatoria
+    cjto_retira(mundo->bases[sai->base]->presentes, sai->heroi);    /*retira o heroi do conjunto de herois em B*/
+    int destino = aleat(0, mundo->nbases-1);    /*escolhe base aleatoria*/
 
     cria_viaja(mundo, sai->tempo, sai->heroi, sai->base, destino);
     cria_avisa(mundo, sai->tempo, sai->base);
     
     imprime_sai(mundo, sai);
+
 }
 
 void evento_viaja(mundo_t *mundo, struct viaja *viaja) {
@@ -207,8 +210,8 @@ void evento_viaja(mundo_t *mundo, struct viaja *viaja) {
 
     mundo->neventos++;
 
-    int x1 = mundo->bases[viaja->base]->local_base.x;  // CORRIGIDO
-    int y1 = mundo->bases[viaja->base]->local_base.y;  // CORRIGIDO
+    int x1 = mundo->bases[viaja->base]->local_base.x;  
+    int y1 = mundo->bases[viaja->base]->local_base.y;  
 
     int x2 = mundo->bases[viaja->destino]->local_base.x;
     int y2 = mundo->bases[viaja->destino]->local_base.y;
@@ -224,6 +227,7 @@ void evento_viaja(mundo_t *mundo, struct viaja *viaja) {
 
     cria_chega(mundo, viaja->heroi, viaja->destino, viaja->tempo + duracao); 
     imprime_viaja(mundo, viaja, distancia, duracao);    
+
 }
 
 void evento_morre(mundo_t *mundo, struct morre *morre) {
@@ -236,9 +240,9 @@ void evento_morre(mundo_t *mundo, struct morre *morre) {
 
     mundo->neventos++;
 
-    cjto_retira(mundo->bases[morre->base]->presentes, morre->heroi);    //retira heroi da base
+    cjto_retira(mundo->bases[morre->base]->presentes, morre->heroi);    /*retira heroi da base*/
 
-    mundo->herois[morre->heroi]->vivo = 0;              //heroi = morto
+    mundo->herois[morre->heroi]->vivo = 0;              /*heroi = morto*/
 
     cria_avisa(mundo, morre->tempo, morre->base);
     imprime_morre(morre);
@@ -250,7 +254,6 @@ void evento_missao(mundo_t *mundo, struct missao *missao) {
     if (!mundo || !missao)
         return;
     
-    
     mundo->neventos++;
     missao->tentativas++;
 
@@ -258,18 +261,18 @@ void evento_missao(mundo_t *mundo, struct missao *missao) {
     cjto_imprime(missao->habilidades_missao);
     printf(" ]\n");
 
-    // vetor com ids das bases
+    /* vetor com ids das bases */
     int dist_missao[mundo->nbases];
     for (int i = 0; i < mundo->nbases; i++)
         dist_missao[i] = i;
 
-    // ordena vetor por distância da missão
+    /* ordena vetor por distância da missão */
     quicksort(mundo, missao, dist_missao, 0, mundo->nbases - 1);
 
     int bmp = -1;
     struct cjto_t *hab_base = NULL;
 
-    // percorre bases para ver se alguma cumpre a missão
+    /* percorre bases para ver se alguma cumpre a missão */
     for (int i = 0; i < mundo->nbases; i++) {
         int base_id = dist_missao[i];
         base_t *b = mundo->bases[base_id];
@@ -308,7 +311,7 @@ void evento_missao(mundo_t *mundo, struct missao *missao) {
         hab_base = NULL;
     }
 
-    // missão cumprida normalmente
+    /* missão cumprida normalmente */
     if (bmp >= 0) {
         missao->cumprida = 1;
         mundo->bases[bmp]->missoes_cumpridas++;
@@ -325,7 +328,7 @@ void evento_missao(mundo_t *mundo, struct missao *missao) {
         return;
     }
 
-    // quando não achou BMP, verifica possibilidade de usar Composto V
+    /* quando não achou BMP, verifica possibilidade de usar Composto V */
     if (mundo->ncompostosv > 0 && mundo->relogio % 2500 == 0) {
         int base_mais_proxima = -1;
         for (int i = 0; i < mundo->nbases; i++) {
@@ -367,7 +370,7 @@ void evento_missao(mundo_t *mundo, struct missao *missao) {
                 cjto_destroi(hab_base);
                 cjto_destroi(hab_final_v);
 
-                // cria evento MORRE
+                /* cria evento MORRE */
                 struct morre *evento = malloc(sizeof(struct morre));
                 evento->tempo = mundo->relogio;
                 evento->heroi = heroi_veterano;
@@ -386,11 +389,12 @@ void evento_missao(mundo_t *mundo, struct missao *missao) {
         }
     }
 
-    // missão impossível, reagendar para o dia seguinte
+    /* missão impossível, reagendar para o dia seguinte */
     printf("%6d: MISSAO %d IMPOSSIVEL\n", mundo->relogio, missao->id);
     struct evento_missao *novo_ev = malloc(sizeof(struct evento_missao));
     novo_ev->id = missao->id;
     fprio_insere(mundo->lef, novo_ev, MISSAO, mundo->relogio + 1440);
+
 }
 
 
@@ -427,15 +431,17 @@ void evento_fim(mundo_t *mundo, struct fim *fim) {
                mundo->bases[i]->lotacao,
                mundo->bases[i]->fila_max,
                mundo->bases[i]->missoes_cumpridas);
+
     }
 
     /* Calcula estatísticas das missões */
     int missoes_cumpridas = 0;
-    int tentativas_min = INT_MAX;            //int max é o maior valor possivel de int -> numero muito grande
+    int tentativas_min = INT_MAX;            /* int max é o maior valor possivel de int -> numero muito grande */
     int tentativas_max = 0;
     int soma_tentativas = 0;
 
     for (int i = 0; i < mundo->nmissoes; i++) {
+
         if (mundo->missoes[i]->cumprida == 1) {
             missoes_cumpridas++;
         }
@@ -451,17 +457,17 @@ void evento_fim(mundo_t *mundo, struct fim *fim) {
         soma_tentativas += mundo->missoes[i]->tentativas;
     }
 
-    //se não houve tentativas, ajustar valores
-    if (tentativas_min == INT_MAX) {
+    /* se não houve tentativas, ajustar valores */
+    if (tentativas_min == INT_MAX)
         tentativas_min = 0;
-    }
 
     /* Calcula taxa de mortalidade */
     int herois_mortos = 0;
     for (int i = 0; i < mundo->nherois; i++) {
-        if (!mundo->herois[i]->vivo) {
+
+        if (!mundo->herois[i]->vivo) 
             herois_mortos++;
-        }
+            
     }
 
     /* Imprime estatísticas finais */
@@ -477,4 +483,5 @@ void evento_fim(mundo_t *mundo, struct fim *fim) {
     
     float taxa_mortalidade = (float)herois_mortos / mundo->nherois * 100.0;
     printf("TAXA MORTALIDADE: %.1f%%\n", taxa_mortalidade);
+
 }
