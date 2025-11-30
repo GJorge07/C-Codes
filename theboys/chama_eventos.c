@@ -10,17 +10,16 @@
 
 void chama_eventos(mundo_t *mundo) {
 
-    int continuar = 1;
+    int tipo, prio, continuar = 1;  /*prio representa o tempo que o evento ocorre*/
 
     while (continuar && fprio_tamanho(mundo->lef) > 0) {        
 
-        int tipo, prio;         /*prio representa o tempo que o evento ocorre*/
         void *item_escolhido = fprio_retira(mundo->lef, &tipo, &prio); /* item_escolhido é o evento retirado da lef */
 
-        if (item_escolhido == NULL) 
+        if (!item_escolhido) 
             break;
 
-         mundo->relogio = prio;            
+         mundo->relogio = prio;         /* atualiza o relógio do mundo para o tempo do evento retirado*/   
 
         switch (tipo) {                        /* verifica o tipo do evento e chama a função correspondente */
             

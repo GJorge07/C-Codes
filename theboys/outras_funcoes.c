@@ -25,6 +25,7 @@ int aleat(int min, int max) {
 int calcula_dist(struct localizacao loc1, struct localizacao loc2) {
 
     int dx, dy;
+
     dx = loc2.x - loc1.x;
     dy = loc2.y - loc1.y;
     return sqrt(dx * dx + dy * dy);
@@ -39,18 +40,18 @@ int Particao(mundo_t *mundo, missao_t *missao, int v[], int ini, int fim) {
     int i = ini + 1;
     int j = fim;
 
-    struct localizacao Lm = missao->local_missao;
+    struct localizacao lm = missao->local_missao;
 
-    int dist_p = calcula_dist(mundo->bases[p]->local_base, Lm);
+    int dist_p = calcula_dist(mundo->bases[p]->local_base, lm);
 
     while (1) {
 
         while (i <= fim &&
-            calcula_dist(mundo->bases[v[i]]->local_base, Lm) < dist_p)
+            calcula_dist(mundo->bases[v[i]]->local_base, lm) < dist_p)
             i++;
 
         while (j >= ini + 1 &&
-            calcula_dist(mundo->bases[v[j]]->local_base, Lm) > dist_p)
+            calcula_dist(mundo->bases[v[j]]->local_base, lm) > dist_p)
             j--;
 
         if (i >= j) break;
@@ -63,6 +64,7 @@ int Particao(mundo_t *mundo, missao_t *missao, int v[], int ini, int fim) {
     v[ini] = v[j];
     v[j] = p;
     return j;
+    
 }
 
 void quicksort(mundo_t *mundo, missao_t *missao, int dist_missao[], int inicio, int fim) {

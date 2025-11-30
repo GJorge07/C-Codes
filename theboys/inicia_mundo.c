@@ -33,14 +33,14 @@
     /* inicializa valores de herois */
     mundo->herois = malloc(sizeof(heroi_t*)*mundo->nherois); 
 
-    if (mundo->herois == NULL) 
+    if (!mundo->herois) 
         return NULL;
     
     for (int i = 0; i < mundo->nherois; i++) {
 
         mundo->herois[i] = malloc(sizeof(heroi_t));
 
-        if (mundo->herois[i] == NULL) 
+        if (!mundo->herois[i]) 
             return NULL;
 
         mundo->herois[i]->vivo = 1;    
@@ -61,7 +61,7 @@
     for (int i = 0; i < mundo->nbases; i++) {
         mundo->bases[i] = malloc(sizeof(base_t));
 
-        if (mundo->bases[i] == NULL) 
+        if (!mundo->bases[i]) 
             return NULL;
 
         mundo->bases[i]->id = i;
@@ -79,13 +79,13 @@
     /* inicializa valores de missões */
     mundo->missoes = malloc(sizeof(missao_t*)*mundo->nmissoes);  
     
-    if (mundo->missoes == NULL) 
+    if (!mundo->missoes) 
         return NULL;
 
     for (int i = 0; i < mundo->nmissoes; i++) {
         mundo->missoes[i] = malloc(sizeof(missao_t));
         
-        if (mundo->missoes[i] == NULL) 
+        if (!mundo->missoes[i]) 
             return NULL;
         
         mundo->missoes[i]->id = i;

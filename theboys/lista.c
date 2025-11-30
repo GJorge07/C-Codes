@@ -70,7 +70,7 @@ int lista_insere_fim (struct lista *lista, int chave){
             lista->tamanho++;
         }
         else {
-            aux = lista->ini;             /*Caso contrário, percorremos a lista toda até o aux->prox apontar pro nada*/
+            aux = lista->ini;             /*Caso contrário, == NULLpercorremos a lista toda até o aux->prox apontar pro nada*/
             while (aux->prox != NULL)
                  aux = aux->prox;
             aux->prox = novo;
