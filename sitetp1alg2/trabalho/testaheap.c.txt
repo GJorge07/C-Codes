@@ -1,0 +1,202 @@
+===== INÍCIO DOS TESTES AUTOMATIZADOS =====
+
+==== INICIALIZAÇÃO DO HEAP ====
+OK: Heap inicializado.
+
+==== INSERÇÕES ====
+Inserindo Gabriel
+Inserindo Arthur
+Inserindo Nickel
+Inserindo Gabriel
+Erro: Gabriel é nome repetido
+Inserindo 
+Erro: Nome vazio
+Inserindo NULL
+Erro: Impossível inserir  NULL
+Inserindo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+Erro: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA é Nome inválido, maior que 50 caracteres!
+Inserindo 1024 pacientes...
+Inserindo Extra...
+Erro: heap cheio!
+
+==== IMPRESSÃO DO HEAP ====
+
+Inserindo Gabriel
+Inserindo Arthur
+Inserindo Nickel
+
+Imprimindo fila de pacientes...
+
+Fila de espera:
+
+(10 - Nickel)
+(5 - Arthur)
+(8 - Gabriel)
+
+
+==== REMOÇÃO DO PACIENTE DE MAIOR PRIORIDADE E CHAMADA DO PRÓXIMO ====
+Inserindo Felipe com prioridade 8...
+Inserindo Krupa com prioridade 10...
+Inserindo Sokulski com prioridade 5...
+Removendo Krupa...
+Nome removido: Krupa
+Próximo paciente: Krupa
+Heap após a remoção:
+
+Imprimindo fila de pacientes...
+
+Fila de espera:
+
+(8 - Felipe)
+(5 - Sokulski)
+
+Inicializando outro heap...
+Remoção em heap vazio -> Retornado: Fila Vazia!
+Tentando remover NULL...
+Remoção em heap NULL -> Retornado: Fila Nula!
+
+==== ALTERA PRIORIDADE ====
+Tentando alteral NULL...
+Erro: Heap não inicializado -> retorno = -1
+Heap inicializado
+Tentando alterar Bruno...
+Erro: Não há pacientes na fila para alterar
+Inserindo Yuuki
+Inserindo Hayashi
+Inserindo Guilherme
+
+Imprimindo fila de pacientes...
+
+Fila de espera:
+
+(7 - Hayashi)
+(4 - Yuuki)
+(2 - Guilherme)
+
+
+Alterando Souza...
+Erro: Paciente não encontrado!
+
+Alterando a prioridade de Yuuki para 10
+Prioridade atualizada com sucesso!
+Imprimindo fila de pacientes...
+
+Fila de espera:
+
+(10 - Yuuki)
+(7 - Hayashi)
+(2 - Guilherme)
+
+
+Alterando a prioridade de Hayashi para 1
+Prioridade atualizada com sucesso!
+Imprimindo fila de pacientes...
+
+Fila de espera:
+
+(10 - Yuuki)
+(1 - Hayashi)
+(2 - Guilherme)
+
+
+==== HEAPFY ====
+Inserindo Gabriel
+Inserindo Arthur
+Inserindo Nickel
+Inserindo Isabela
+Inserindo Wojcik
+Agora vamos ordenar com heapsort:
+Imprimindo após o heapsort:
+
+Imprimindo fila de pacientes...
+
+Fila de espera:
+
+(1 - Isabela)
+(5 - Arthur)
+(8 - Gabriel)
+(10 - Wojcik)
+(10 - Nickel)
+
+
+Agora vamos heapficar:
+Imprimindo após heapficar:
+
+Imprimindo fila de pacientes...
+
+Fila de espera:
+
+(10 - Wojcik)
+(10 - Nickel)
+(5 - Arthur)
+(1 - Isabela)
+(8 - Gabriel)
+
+Vamos iniciar um novo heap:
+Agora vamos heapficar:
+Erro: Impossível heapficar, fila vazia!
+
+=== CHECA HEAP ===
+Inserindo Gabriel
+Inserindo Arthur
+Inserindo Nickel
+Inserindo Isabela
+Inserindo Wojcik
+Agora vamos ordenar com heapsort:
+Imprimindo após o heapsort:
+
+Imprimindo fila de pacientes...
+
+Fila de espera:
+
+(1 - Isabela)
+(5 - Arthur)
+(8 - Gabriel)
+(10 - Wojcik)
+(10 - Nickel)
+
+
+Agora vamos utilizar o checaheap:
+Erro: Vetor não é Heap!
+Agora vamos heapficar:
+Heap Heapficado!
+Agora vamos checar se é heap com o checaheap:
+
+Imprimindo fila de pacientes...
+
+Fila de espera:
+
+(10 - Wojcik)
+(10 - Nickel)
+(5 - Arthur)
+(1 - Isabela)
+(8 - Gabriel)
+
+Agora o vetor é heap!
+Vamos iniciar um novo heap:
+Agora vamos checar se é heap:
+Erro: Impossível checar, fila vazia!
+
+==== TESTE DE DESEMPENHO DOS ALGORITMOS DE ORDENAÇÃO ====
+
+Inserindo 1024 números aleatórios...
+Erro: QuickSort recebeu NULL! Comparações não realizadas
+Inserindo 1024 números aleatórios...
+Erro: SelectSort recebeu NULL! Comparações não realizadas
+Inserindo 1024 números aleatórios...
+Erro: HeapSort recebeu NULL! Comparações não realizadas
+
+Vetor reinicializado...
+Tentando relizar comparações...
+Erro: Tamanho do vetor nulo (0)
+Vetor reinicializado...
+Inserindo -5 números aleatórios...
+Erro: tamanho do vetor inválido! Comparações não realizadas
+
+Reinicializando o vetor
+Inserindo 1024 números aleatórios...
+QuickSort : 12121 comparações, 3575 trocas
+SelectSort: 523776 comparações, 1023 trocas
+HeapSort  : 17182 comparações, 9221 trocas
+
+===== FIM DOS TESTES =====

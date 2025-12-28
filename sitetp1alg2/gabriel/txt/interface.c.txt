@@ -1,0 +1,359 @@
+/*Interface pela qual a efermeira chefe irá interagir com o heap*/
+#include <stdio.h>
+#include "heap.h"
+#include <string.h>
+
+//imprime vetor dentro de cria vetor?????!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+/*Chama a função que remove o paciente com maior prioridade da fila e imprime.
+ *Caso a fila esteja vazia ou nula, avisa.
+ **/
+void remova(Heap *h, char *nome)
+{
+	printf("\nRemovendo da fila...\n\n");
+	RemoveHeap(h, nome);
+
+	if (strcmp(nome, "Fila Vazia!") == 0)
+	{
+		printf("A fila está vazia!\n\n");
+		return;
+	}
+
+	if (strcmp(nome, "Fila Nula!") == 0)
+	{
+		printf("A fila é nula!\n\n");
+		return;
+	}
+
+	printf("O próximo paciente é %s, que foi removido da fila!\n\n", nome);
+}
+
+/*Chama a função que insere um novo paciente na fila.
+ *Pede o nome do paciente para a enfermeira.
+ **/
+void insere(Heap *h, char *nome, int prioridade, int status)
+{
+	printf("\nEntre com o nome do paciente:\n\n");
+	scanf(" %s", nome);
+
+	printf("\nEntre com a prioridade do paciente, que é um número inteiro:\n\n");
+	scanf("%d", &prioridade);
+
+	printf("\nInserindo paciente na fila...\n\n");
+	status = InsereHeap(h, prioridade, nome);
+
+	if (status == -1)
+	{
+		printf("Paciente não inserido: Verifique se o nome é válido e não é repetido\n\n");
+		return;
+	}
+	if (status == 0)
+	{
+		printf("Paciente não inserido: Verifique se a fila está cheia ou é nula\n\n");
+		return;
+	}
+
+	printf("Paciente inserido com sucesso!\n\n");
+}
+
+/*Chama a função que altera a prioridade de um paciente já existente na fila.
+ *Pede o nome do paciente para a enfermeira.
+ **/
+void altera(Heap *h, char *nome, int prioridade, int status)
+{
+	printf("\nEntre com o nome do paciente que se quer alterar a prioridade:\n\n");
+	scanf(" %s", nome);
+
+	printf("\nEntre com a nova prioridade do paciente, que é um número inteiro:\n\n");
+	scanf("%d", &prioridade);
+
+	printf("\nAlterando prioridade do paciente...\n\n");
+	status = AlteraHeap(h, nome, prioridade);
+
+	if (status == -1)
+	{
+		printf("Paciente não encontrado: Verifique se a fila é nula\n\n");
+		return;
+	}
+	if (status == 0)
+	{
+		printf("Paciente não encontrado: Verifique se a fila está vazia ou se o paciente foi cadastrado\n\n");
+		return;
+	}
+
+	printf("Prioridade do paciente %s foi alterada com sucesso!\n\n", nome);
+}
+
+
+/*Chama a função que inicializa a fila de pacientes.
+ **/
+void inicializa(Heap **h)
+{
+	printf("\nInicializando fila...\n\n");
+
+	if (*h != NULL)
+	{
+		printf("Fila já inicializada!\n\n");
+		return;
+	}
+
+	*h = InicHeap();
+
+	if (*h == NULL)
+		printf("Erro: não tem espaço da memória para fila\n\n");
+
+	printf("Fila criada com sucesso!\n\n");
+}
+
+/*Chama a função que verifica se a fila está ordenada por prioridade.
+ *Informa a enfermeira do resultado.
+ **/
+void verifica(Heap *h, int status)
+{
+	printf("\nVerificando se a fila está ordenada por prioridade...\n\n");
+
+	status = ChecaHeap(h);
+
+	if (status == -1)
+	{
+		printf("Fila nula ou vazia! Não tem como verificar se está ordenada por prioridade\n\n");
+		return;
+	}
+
+	if (status == 0)
+	{
+		printf("A fila NÃO está ordenada por prioridade!\n\n");
+		return;
+	}
+
+	printf("A fila está ordenada por prioridade!\n\n");
+}
+
+/*Chama a função que transforma o conjunto de pacientes em uma fila ordenada por prioridade.
+ **/
+void ordena_prioridade(Heap *h, int status)
+{
+	printf("\nOrdenando a fila por prioridade...\n\n");
+
+	status = Heapfy(h);
+
+	if (status == -1)
+	{
+		printf("Fila Nula! Não tem como ordenar por prioridade\n\n");
+		return;
+	}
+
+	if (status == 0)
+	{
+		printf("Fila Vazia! Não tem como ordenar por prioridade\n\n");
+		return;
+	}
+
+	printf("Fila ordenada com sucesso!\n\n");
+}
+
+/*Chama a função que reinicia a fila de pacientes.
+ **/
+void reinicia(Heap **h)
+{
+	printf("\nReiniciando fila...\n\n");
+
+	if (*h == NULL)
+		printf("Fila já estava liberada");
+	else
+	{
+		*h = LiberaHeap(*h);
+		printf("Fila foi liberada");
+	}
+
+	*h = InicHeap();
+
+	if (*h == NULL)
+		printf(", mas não foi iniciada: sem espaço de memória\n\n");
+
+	printf(" e foi iniciada com sucesso!\n\n");
+}
+
+/*Chama a função que libera a fila de pacientes.
+ **/
+void libera(Heap **h)
+{
+	printf("\nLiberando fila...\n");
+
+	if (*h == NULL)
+	{
+		printf("Fila já estava liberada!\n\n");
+		return;
+	}
+
+	*h = LiberaHeap(*h);
+
+	printf("Fila liberada com sucesso!\n\n");
+}
+
+/*Chama a função que libera a fila de pacientes, e logo depois
+ *o programa é encerrado.
+ **/
+void encerra(Heap **h)
+{
+	printf("\nEncerrando programa e liberando fila...\n\n");
+
+	if (*h == NULL)
+	{
+		printf("Fila já estava liberada! Programa encerrado.\n\n");
+		return;
+	}
+
+	*h = LiberaHeap(*h);
+
+	printf("Fila liberada com sucesso! Programa encerrado.\n\n");
+}
+
+/*Chama a função que ordena a fila de pacientes por ordem crescente de prioridade.
+ **/
+void ordena_heapsortp(Heap *h, int status)
+{
+	printf("\nOrdenando fila por ordem crescente de prioridade...\n\n");
+
+	status = HeapSort(h);
+
+	if (status == -1)
+	{
+		printf("Fila Nula! Não tem como ordenar em ordem crescente\n\n");
+		return;
+	}
+
+	if (status == 0)
+	{
+		printf("Fila Vazia! Não tem como ordenar em ordem crescente\n\n");
+		return;
+	}
+
+	printf("Fila ordenada com sucesso!\n\n");
+}
+
+void imprime_vetor(int *v)
+{
+	int i;
+
+	if (v == NULL)
+	{
+		printf("Vetor nulo!\n\n");
+		return;
+	}
+
+	printf("Vetor de inteiros:\n\n");
+
+	/*
+	for (i = 0; i < v->tam; i++)
+		printf("%d ", v->vetor[i]);
+	*/
+
+	printf("\n\n");
+}
+
+
+void cria_vetor(int *v)
+{
+	printf("\nCriando vetor de 1024 inteiros aleatórios...\n\n");
+
+	v = CriaVetor();
+
+	if (v == NULL)
+	{
+		printf("Erro ao criar vetor: sem espaço de memória\n\n");
+		return;
+	}
+	printf("Vetor criado com sucesso!\n\n");
+
+	imprime_vetor(v); /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1*/
+}
+
+
+
+void painel()
+{
+	printf("==========================================================================================\n\n");
+
+	printf("Entre com o código de acordo com a ação que você quer realizar na fila:\n\n");
+
+	printf("-> 0, se quiser ENCERRAR a fila e sair do programa\n\n");
+
+	printf("-> 1, se quiser INICIALIZAR a fila de pacientes\n\n");
+
+	printf("-> 2, se quiser INSERIR um novo paciente na fila\n\n");
+
+	printf("-> 3, se quiser CHAMAR o paciente com MAIOR PRIORIDADE e REMOVÊ-LO da fila\n\n");
+
+	printf("-> 4, se quiser IMPRIMIR a fila de espera\n\n");
+	
+	printf("-> 5, se quiser ALTERAR a prioridade de um paciente já existente na fila\n\n");
+	
+	printf("-> 6, se quiser VERIFICAR se a fila está ordenada por prioridade\n\n");
+		
+	printf("-> 7, se quiser REINICIAR a fila de pacientes\n\n");
+
+	printf("-> 8, se quiser LIBERAR a fila de pacientes\n\n");
+
+	printf("-> 9, se quiser TRANSFORMAR o conjunto de pacientes em uma FILA ORDENADA POR PRIORIDADE\n\n");
+
+	printf("-> 10, se quiser ORDENAR a fila de pacientes por ORDEM CRESCENTE DE PRIORIDADE\n\n");
+
+	printf("-> 11, se quiser CRIAR VETOR DE 1024 INTEIROS aleatórios\n\n");
+
+	printf("-> 12, se quiser IMPRIMIR o vetor de 1024 INTEIROS aleatórios\n\n");
+
+	printf("-> 13, se quiser ORDENAR o vetor de 1024 INTEIROS aleatórios usando o HEAPSORT\n\n");
+
+	printf("-> 14, se quiser COMPARAR os algoritmos de ordenação HEAPSORT, QUICKSORT e SELECTION SORT\n\n");
+
+	printf("-> 15, se quiser IMPRIMIR ESSE PAINEL novamente\n\n");
+
+	printf("==========================================================================================\n\n");
+}
+
+int main ()
+{	 
+	int codigo;
+	int prioridade = 0;
+	int status = 0;
+	char nome[TAM_NOME];
+	Heap *h = NULL;
+	int *v;
+
+	printf("xxxxxxx==========------------PRONTO SOCORRO HEAP OR QUICK------------==========xxxxxxx\n\n");
+
+	painel();
+	
+	do {
+		printf("Código: ");
+
+		scanf("%d", &codigo);
+		
+		switch (codigo)
+		{
+			case 0: { encerra(&h); break; };
+			case 1: { inicializa(&h); break; }
+			case 2: { insere(h, nome, prioridade, status); break; }
+			case 3: { remova(h, nome); break; }
+			case 4: { ImprimeHeap(h); break; }
+			case 5: { altera(h, nome, prioridade, status); break; }
+			case 6: { verifica(h, status); break; }
+			case 7: { reinicia(&h); break; }
+			case 8: { libera(&h); break; }
+			case 9: { ordena_prioridade(h, status); break; }
+			case 10: { ordena_heapsortp(h, status); break; }
+			/*case 11: { criaVetor(); break; }
+			case 12: { imprimeVetor(); break; }
+			case 13: { compara_sorts(); break; }
+			case 14: { liberaVetor(); break; }*/
+			case 15: { painel(); break; }
+			default: printf("Código inválido, tente novamente.\n");
+		}
+
+		printf("----------------------------------------------------------------------------------------------\n\n");
+
+	} while (codigo != 0);
+
+	return 0;
+}

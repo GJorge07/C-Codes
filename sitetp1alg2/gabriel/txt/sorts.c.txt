@@ -1,0 +1,188 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "sorts.h"
+
+/* Contadores globais */
+int compQuick = 0, trocQuick = 0;
+int compSelect = 0, trocSelect = 0;
+int compHeap = 0, trocHeap = 0;
+
+
+/* Função de troca */
+void troca(int *a, int *b, int *t) {
+    int aux = *a;
+    *a = *b;
+    *b = aux;
+    (*t)++;
+}
+
+
+/* ================= QUICK SORT ================= */
+
+int escolhePivo(int v[], int ini, int fim, int *trocQuick) {
+    int meio = (ini + fim) / 2;
+
+    
+    if (v[ini] > v[meio]) 
+        troca(&v[ini], &v[meio], trocQuick);
+
+    
+    if (v[meio] > v[fim]) 
+        troca(&v[meio], &v[fim], trocQuick);
+
+    
+    if (v[ini] > v[meio]) 
+        troca(&v[ini], &v[meio], trocQuick);
+
+    return meio; // mediana
+}
+
+void Particao(int v[], int ini, int fim, int *pos_pivo, int *compQuick, int *trocQuick) {
+    
+    int i = ini + 1, j = fim;
+    int pospivo = escolhePivo(v, ini, fim, trocQuick);
+    int pivo = v[pospivo];
+
+
+    //Coloca pivô no início
+    troca(&v[ini], &v[pospivo], trocQuick);
+
+    while (i < j) {
+
+        while (i <= fim && v[i] <= pivo) { 
+            i++; 
+            (*compQuick)++; 
+        }
+        
+
+        while (j > ini && v[j] > pivo) { 
+            j--; 
+            (*compQuick)++; 
+        }
+        
+
+        if (i < j) 
+        troca(&v[i], &v[j], trocQuick);
+    }
+
+    troca(&v[ini], &v[j], trocQuick);
+    *pos_pivo = j;
+}
+
+void Quick(int v[], int ini, int fim, int *compQuick, int *trocQuick) {
+    int pos_pivo;
+    if (ini < fim) {
+        Particao(v, ini, fim, &pos_pivo, compQuick, trocQuick);
+        Quick(v, ini, pos_pivo - 1, compQuick, trocQuick);
+        Quick(v, pos_pivo + 1, fim, compQuick, trocQuick);
+    }
+}
+
+void ContQuickSort(int v[], int n, int *compQuick, int *trocQuick) {
+
+    if (v == NULL || n <= 0)        //se n for inválido ou vetor NULL
+        return;
+
+    *compQuick = 0; // zera o contador de comparações
+    *trocQuick = 0; // zera o contador de trocas
+    Quick(v, 0, n - 1, compQuick, trocQuick);   // chama a função recursiva de QuickSort
+}
+
+
+/* ================= SELECT SORT ================= */
+
+void ContSelectSort(int v[], int n, int *compSelect, int *trocSelect ) {
+
+    if (v == NULL || n <= 0)        //se n for inválido ou vetor NULL
+        return;
+
+    *compSelect = 0; 
+    *trocSelect = 0;
+    int menor,i,j;
+
+    for (i = 0; i < n - 1; i++) {
+         menor = i;
+        for (j = i + 1; j < n; j++) {
+            (*compSelect)++;
+            if (v[j] < v[menor]) 
+                menor = j;
+        }
+        troca(&v[i], &v[menor], trocSelect);
+    }
+}
+
+
+/* ================= HEAP SORT ================= */
+
+void SacodeHeapInt(int i, int tam, int v[], int *compHeap, int *trocHeap) {
+    int filho = 2 * i;
+
+    while (filho <= tam) {
+        if (filho < tam) {
+            (*compHeap)++;
+            if (v[filho] < v[filho + 1]) 
+                filho++;
+        }
+
+        (*compHeap)++;
+        if (v[filho/2] >= v[filho]) 
+            return;
+
+        troca(&v[i], &v[filho], trocHeap);
+        i = filho;
+        filho = 2 * i;
+    }
+}
+
+void HeapfyInt(int v[], int tam) {    
+    int i;
+    for (i = tam / 2; i >= 1; i--)
+        SacodeHeapInt(i, tam, v, &compHeap, &trocHeap);
+}
+
+void ContHeapSort(int v[], int n, int *compHeap, int *trocHeap) {
+
+    if (v == NULL || n <= 0)        //se n for inválido ou vetor NULL
+        return;
+
+    *compHeap = 0; 
+    *trocHeap = 0;
+
+    HeapfyInt(v, n);
+
+    for (int i = n; i > 1; i--) {
+        troca(&v[1], &v[i], trocHeap);
+        SacodeHeapInt(1, i - 1, v, compHeap, trocHeap);
+    }
+}
+
+
+//Vetores
+
+int* CriaVetor(int n) {
+
+    int *v = (int*) malloc(n * sizeof(int));
+    if (v == NULL) {
+        exit(1);
+    }
+    return v;
+}
+
+void PreencheAleatorio(int *v, int n) {
+    for (int i = 0; i < n; i++)
+        v[i] = rand() % 1000;
+}
+
+
+void ImprimeVetor(int *v, int n) {
+    int i;
+    for (i = 0; i < n; i++) {
+        printf("%d ", v[i]);
+    }
+    printf("\n");
+}
+
+void LiberaVetor(int *v) {
+    if (v != NULL)
+        free(v);
+}

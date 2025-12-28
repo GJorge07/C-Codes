@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Relatórios</title>
+        <!-- Link para o arquivo de estilo (corrigido para subir um nível) -->
+        <link rel="stylesheet" href="../css/style.css">
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="nav-link">
+                <a href="../index.html">Voltar à pagina inicial</a><br>
+            </div>
+
+            <h1>Relatório do Trabalho</h1>
+
+            <!-- ======================================= -->
+            <!--        NOVO TEXTO DO RELATÓRIO        -->
+            <!-- ======================================= -->
+            <div class="report-content">
+
+                <h2>Fase 0:</h2>
+                <p>
+                    Do dia <em>21/10 ao 23/10</em> começamos a fazer o trabalho, iniciando pelo <em>entendimento do que se devia fazer, <strong>definindo as estruturas que trabalhariamos, construindo um protótipo de implementação do TAD Heap, apenas com as funções que já tinhamos visto em sala de aula e elementos mais básicos, e </strong><strong>decidindo como faríamos o trabalho</strong></em> (optamos por utilizar a plataforma github e a ferramenta git para podermos fazer esse trabalho em conjunto). Nessa fase, ambos trabalharam com a mesma tarefa. Sobre a parte mais dificil dessa partee, foi definir a estrutura do heap - com seus campos, nomes e acesso - da melhor forma possível para seguir bem durante o trabalho. Um outro atento dessa parte foi pensar em como faríamos para mudar as funções que sabíamos fazer com inteiros agora para structs. Foi definido, também, que faríamos uma struct para paciente, com um campo inteiro, representando a prioridade, e um campo char de 50 caracteres, representando o nome. Além disso, decidimos fazer alocação dinâmica. Acreditamos que dessa forma o trabalho não ficaria tão complexo, abrangeria tudo que foi pedido e daria base para um trabalho bem estruturado no futuro.
+                </p>
+
+                <h2>Fase 1:</h2>
+                <p>
+                    Do dia <em>24/10 ao 27/10</em> nós dois pensamos (cada um isoladamente, e depois juntamos nossas ideias) em como faríamos para <em>implementar as funções novas do Heap, <strong>o AlteraHeap, RemoveHeap e ImprimeHeap, em como lidaríamos com o desafio de </strong><strong>manipular strings, que nunca tínhamos feitos, e em como fazer o </strong><strong>heap.h, além de pensar em como </strong><strong>estruturar o trabalho para o futuro.</strong></em>
+                </p>
+                <p>
+                    Primeiramente, para entender como faríamos para <em>mexer com strings</em>, aprendemos a utilizar a biblioteca “string.h” e suas funções. Depois de aprender, não foi difícil usar no decorrer do desenvolvimento do TAD, como na implementação da função Imprime, que é muito fácil de pensar conhecendo as funções da biblioteca. Mais para frente, tivemos algumas dificuldades relacionadas ao buffer e a interface da enfermeira.
+                </p>
+                <p>
+                    Sobre o <em>RemoveHeap</em>, o Arthur veio com a ideia que foi usada na implementação da função, cujo o papel é remover o paciente com maior prioridade (primeiro), manter o heap e informar a enfermeira quem foi esse paciente que foi removido. Para conseguir remover o primeiro paciente e manter a prioridade, pensamos em colocar o último paciente do heap na primeira posição, violando o heap, e, logo em seguida, “sacudir o heap”, corrigindo o heap (pois a função sacode “desce” o paciente até a posição certa) e eliminando o primeiro paciente. Para informar a enfermeira chefe qual foi paciente removido, pensamos em alterar internamente na função um parâmetro “nome” recebido da função main, colocando nela a string do paciente removido ou o código de erro correspondente. Nessa parte, pensamos e testamos diversas formas de retornar erro ou o nome do paciente, retornando uma struct paciente, char…(o que não seria tão bom pois teria que alocar espaço dinamicamente para eles, deixando o trabalho muito mais complexo”), mas vimos que da forma que fizemos foi o melhor jeito que pensamos.
+                </p>
+                <p>
+                    Sobre a <em>função AlteraHeap</em>, pensamos em infinitas formas de funcionamento e implementação: Recebendo status (piorou ou melhorou) e mudando a prioridade de acordo com ele ou “subindo ou descendo” o paciente no heap de acordo com o status também; Pensamos, também, em receber da enfermeira a nova prioridade direto e, logo em seguida, heapficar o vetor, acertando a posição do paciente após a mudança de prioridade. Após algum dias, decidimos que a melhor forma de fazer seria com a ideia da enfermeira enviar diretamente a prioridade nova do paciente, pois acreditamos que dessa forma o código ficaria mais simples, bem implementado e daria mais liberdade à enfermeira.
+                </p>
+                <p>
+                    Para o <em>Heap.h</em>, decidimos fazer uma estrutura totalmente opaca, o que deu muito trabalho manter no futuro (já será explicado). Fizemos um “rascunho” do .h nessa fase.
+                </p>
+                <p>
+                    Sobre <em>a forma que estruturamos o trabalho para o futuro,</em> decidimos mudar. Antes, nois dois estavámos trabalhando sobre as mesmas coisas e pensando nos mesmos problemas. Depois, decidimos dividir o trabalho algumas partes do trabalho: Arthur faria a interface da enfermeira, o relatório, o algoritmo de HeapSort para inteiros e revisaria e modificaria o log, a página em HTML e os outros algoritmos de ordenação. Já Gabriel focaria em fazer o log, a página HTML e os algoritmos de ordenação SelectSort e QuickSort, além de revisar e modificar a interface, o relatório e o algoritmo HeapSort. Ambos ainda estavam mexendo juntos na implementação e estrutura do TAD Heap. Pensamos em realizar o trabalho dessa forma pois ambos estariam de certa forma “quebrando”, ajustando e melhorando o TAD Heap e os algoritmos de Sort: De um lado o Arthur interagindo através da interface e do outro lado gabriel interagindo através do log. Além disso, a divisão de trabalho e revisão trocada foi pensada para que os dois adquirissem todos os conhecimentos e aprendizados que esse trabalho pode gerar, além dos dois estarem pensando em todas as partes do trabalho e trazendo ideias que o outro pode não ter percebido.
+                </p>
+                <p>
+                    Ainda sobre o <em>trabalho em equipe</em>, não nos faltou tempo para discutir e pensar juntos sobre o trabalho. Sempre estamos na universidade juntos e diversas vezes nos sentamos por lá para resolver coisas do trabalho, ou mesmo tivemos conversas avulsas durante intervalos ou idas sobre o trabalho.
+                </p>
+
+                <h2>Fase 2:</h2>
+                <p>
+                    Nessa parte, aproximadamente do dia <em>27/10 ao 01/11, foi o de trabalho de programação mais intenso, onde <strong>implementamos a interface, o log e fizemos infinitas alterações no TAD. O que mais marcou essa fase foi a questão de passarmos muito tempo pensando em todas as formas inválidas de ações que poderiam acontecer sobre o Heap. Conseguimos, dessa forma, adicionar diversos </strong><strong>casos de erro</strong> no retorno das funções. Além disso, pensamos e repensamos sobre a interação da enfermeira com a fila e seu “grau de liberdade” sobre ela.
+                </p>
+                <p>
+                    Uma das alterações que fizemos no TAD e que impactou no log e na interface foi com questão à <em>estrutura opaca do Heap</em>. Pensamos em diversas coisas inicialmente e tivemos que modificar por conta que violava o TAD e não sabiamos, haja vista que sempre em programação l trabalhamos apenas na criação de TADs, com os programas principais ou logs vindo prontos para gente. Contudo, com muito esforço e modificações de retornos e implementações, conseguimos manter a estrutura opaca.
+                </p>
+                <p>
+                    Sobre a <em>interface</em>, foi feito e refeito diversas vezes o layout, visando ser o mais claro possível para a enfermeira chefe, e também as operações que a enfermeira poderia fazer, sempre pensando na liberdade dela. 
+                </p>
+                <p>
+                    Sobre o <em>log</em>, fizemos pensando sobre todos os erros que a enfermeira chefe poderia cometer tendo uma grande liberdade sobre o TAD. No final, por causa da abrangência dos testes realizados, tivemos como produto um TAD extremamente seguro, contendo formas de proteger contra segmentation fault e outros erros até para casos além do usados na interface pela enfermeira.
+                </p>
+
+                <h2>Fase 3:</h2>
+                <p>
+                    Nessa parte, aproximadamente entre <em>01/11 até 05/11, estivemos focados na implementação e interpretação dos algoritmos de ordenação e na mais modificação no TAD Heap provido de mais testes</em>.
+                </p>
+                <p>
+                    Inicialmente, na <em>implementação dos algoritmo</em>s, decidimos criar os vetores dinamicamente, visto que 3 vetores de 1024 posições ocuparia um espaço de memória muito grande. Portanto, criamos, até sem dificuldades -visto que já sabíamos todos os algoritmos de ordenação-, um TAD de sorts todo voltado para o uso com vetores dinâmicos. Contudo, quando tentamos utilizar esse TAD através da interface não alcançamos o resultado esperado. O número de comparações e trocas dos algoritmos estavam todos errados. Desse modo, reconsideramos e decidimos interagir com o TAD através de vetores estáticos criados na interface, porém deixando as funções que implementavam a estrutura dinâmica no arquivo “sorts.c” e “sorts.h”, pois não é preciso utilizar todas as funções de um TAD no programa principal (interface).
+                </p>
+                <p>
+                    Sobre como contamos as <em>permutas</em>: uma troca foi contabilizada sempre que dois elementos tiveram suas posições efetivamente permutadas no vetor, ou seja, quando foi executada uma operação de swap. Ações como comparações, atribuições simples, movimentação de índices ou seleção de pivô não foram consideradas trocas. No Heap e HeapSort, uma troca ocorre quando o elemento é reposicionado através de permuta (como durante o Heapfy). No QuickSort, a troca ocorre durante o processo de partição ao permutar elementos. No SelectSort, a troca corresponde à permuta entre a posição atual e o menor elemento encontrado na passagem.
+                </p>
+                <p>
+                    Sobre as <em>comparações</em>: No QuickSort, cada comparação é feita entre elementos do vetor e o pivô durante a partição (v[i] <= pivo e v[j] > pivo). No SelectSort, cada comparação é feita:  v[j] < v[menor] para encontrar o menor elemento. No HeapSort, são feitas comparações entre elementos para manter a propriedade de heap (v[filho] < v[filho+1] e v[filho/2] >= v[filho]). Além disso, as comparações contam apenas quando comparamos valores do vetor, não índices ou condições de laço.
+                </p>
+                <p>
+                    Os <em>resultados</em> obtidos da comparação foram: 
+                </p>
+                <p>
+                    QuickSort : 12653 comparações, 3578 trocas<br>
+                    SelectSort: 523776 comparações, 1023 trocas<br>
+                    HeapSort  : 17265 comparações, 9249 trocas
+                </p>
+                <p>
+                    Desses números, podemos confirmar teorias vistas em sala de aula: O QuickSort possuindo no seu caso médio aproximadamente n.logn comparações (12653 é próximo de 10240) e um número médio de trocas, assim sendo o algoritmo mais eficiente. O SelectSort é interessante, pois faz um número absurdo de comparações (523776, muito próximo de 524800, número dado pela fórmula do custo) e um número extremamente pequeno de trocas, de custo linear, assim como foi visto em sala também, contudo isso não apaga sua total ineficácia como algoritmo de ordenação. Por último, também dá para fazer analises produtivas do HeapSort. Assim como foi visto, seu custo de comparações é muito baixo, sendo também aproximadamente n.logn no caso médio, contudo, é possível observar um certo aumento em relação ao QuickSort, principalmente no número de trocas, que é consequência do custo que se tem para manter o vetor heapficado.
+                </p>
+                <p>
+                    Nessa fase também, é importante citar a dificuldade que tivemos em pensar em mais <em>verificações</em>, como no InsereHeap e no Alteraheap, que adicionamos verificações de nomes válidos, como nomes vazios ou nomes que tem mais caracteres que o permitido.
+                </p>
+                <p>
+                    Ademais, nessa fase, tivemos que enfrentar o desafio de <em>vazamentos de memória e doubles frees</em>, visto que optamos por fazer um heap dinâmico. Para resolver isso, criamos mais códigos de erro para funções de libera e cria Heap e usamos a ferramenta valgrind para ver onde esses erros estavam acontecendo.
+                </p>
+                
+                <h2>Fase 4:</h2>
+                <p>
+                    Na última parte do trabalho, do dia <em>05/11 ao dia 07/11, focamos em fazer a <strong>página em HTML e o relatório do trabalho</strong></em>.
+                </p>
+                <p>
+                    Para o <em>relatório do trabalho</em>, já tinhamos feitos anotações importantes durante o desenvolvimento para criar o relatório, então construir o texto não foi uma tarefa difícil. Decidimos criar esse relatório como se fosse um diário, e explicando as dificuldades e coisas mais importantes do desenvolvimento em uma ordem cronológica. Além disso, optamos por gravar um vídeo para mostrar o resultado final do programa. Também, tivemos que deixar alguns pontos de lado nesse relatório, pois ele já estava ficando muito grande.
+                </p>
+                <p>
+                    Sobre a <em>página em HTML</em>, infelizmente, não conseguimos colocar o html em nosso site pessoal (do dinf). Tentamos de muitos jeitos, pedimos ajudas aos nossos amigos, mas mesmo assim não foi possível.
+                </p>
+                <p>
+                    Tentamos alterar de várias formas a mesma rota, tentamos separar tudo em um diretório só e deixar o index separado, mas também não funcionou. Por último, tentamos renomear os arquivos para o nome padrão - index.html e css.style - e nada mudou. Inclusive fizemos testes em outros computadores, e não tivemos sucesso. A página inicial até funcionava, mas os links para cada parte do trabalho davam erro sempre, mesmo com as rotas certas. Por isso, resolvemos colocar nossas página no github pages, que foi a forma que pensamos de contornar a situação. Uma coisa que fizemos para compensar o acontecimento, foi investir bastante tempo na construção de uma página muito caprichada e estética.
+                </p>
+
+                <h2>Resultados</h2>
+                <p>
+                    Sobre nossos resultados, estamos satisfeitos com o trabalho realizado. Criamos uma interface onde a enfermeira possui muita liberdade para controlar o pronto socorro, por conta de pensarmos em diversos casos de erro que poderiam acontecer. Talvez, só deixamos passar erros muito absurdos, mas nesses casos sempre avisamos através de impressão o que é pra ser feito, como entrar com um número inteiro para a prioridade. Achamos que criamos um TAD seguro o suficiente e mantendo sua elegância, sem retornar infinitos casos de erro muito pouco prováveis. Sobre a interface, achamos que ficou bem bonita, legível e caprichada para a enfermeira chefe. Além disso, a lógica de todas as funções está correta, além de fazermos o possível para o código estar modularizado (com funções como “Troca” e “HeapVazio”), bem comentado e com muita reciclagem, como no caso de usar o SacodeHeap para a função Remove e a Heapfy para a Altera.
+                </p>
+                <p>
+                    Achamos que um dos pontos mais fortes foi que conseguimos mantes uma estrutura opaca do TAD sem quebrar ele. Outra coisa muito importante, é que o programa não possui vazamentos de memória, pois foi utilizado a ferramentas valgrind para detectar e solucionar problemas desse quesito. Também, foi feito um log muito abrangente, contendo diversos casos de uso do TAD.
+                </p>
+                <p>
+                    Ademais, ficamos contentes de ver o resultado final do nosso trabalho que foi feito com muito esforço, além de sentirmos que evolui-mos muito nosso aprendizado com os desafios que aconteceram no caminho.
+                </p>
+                <p>
+                    Lamentamos que não foi possível alocar dinamicamente os vetores nem colocar o trabalho na página do DINF, contudo fica de prova o nosso esforço nas alternativas que tomamos para contornar essas situações.
+                </p>
+            </div>
+
+            <div class="video-section">
+                <h2>Demonstração da Interface</h2>
+                
+                <p class="video-description">
+                    Mostra diversos casos, caminhos e situações que a enfermeira pode encontrar ou tomar. Começamos apresentando as opções se a fila não estiver alocada, depois as opções se a fila estiver funcionando normalmente e depois as opções com a fila vazia, sempre testando coisas que poderiam dar errado, mas que o sistema protege.
+                </p>
+                
+                <video controls loop muted autoplay width="100%">
+                    <source src="../gravacao_tela.webm" type="video/webm">
+                    Seu navegador não suporta o tag de vídeo.
+                </video>
+            </div>
+
+        </div>
+        
+    </body>
+</html>

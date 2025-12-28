@@ -1,0 +1,363 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include "heap.h"
+#include "sorts.h"
+
+void testes() {
+    Heap *h = NULL;
+    Heap *vazia = NULL;
+    int r, i;
+
+    printf("\n===== INÍCIO DOS TESTES AUTOMATIZADOS =====\n\n");
+
+    // Caso 1 - Inicialização
+
+    printf("==== INICIALIZAÇÃO DO HEAP ====\n");
+
+    h = InicHeap();
+    if (h != NULL) 
+        printf("OK: Heap inicializado.\n\n"); 
+    else
+        printf("ERRO: Heap não inicializado!\n");
+
+
+    // Caso 2 - Inserções 
+
+    printf("==== INSERÇÕES ====\n");
+
+    r = InsereHeap(h, 8, "Gabriel");
+    printf("Inserindo Gabriel\n");
+
+    r = InsereHeap(h, 5, "Arthur");
+    printf("Inserindo Arthur\n");
+
+    r = InsereHeap(h, 10, "Nickel");
+    printf("Inserindo Nickel\n");
+
+    r = InsereHeap(h, 7, "Gabriel");
+    printf("Inserindo Gabriel\n");
+    printf("Erro: Gabriel é nome repetido\n");
+
+    r = InsereHeap(h, 3, "");
+    printf("Inserindo " "\n");
+    printf("Erro: Nome vazio\n");
+
+    r = InsereHeap(NULL, 1, "Jorge");
+    printf("Inserindo NULL\n");
+    printf("Erro: Impossível inserir  NULL\n");
+
+    r = InsereHeap(h,9,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    printf("Inserindo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+    printf("Erro: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA é Nome inválido, maior que 50 caracteres!\n");
+
+
+    //inserindo até encher o heap
+    for (i = 1; i < CAPACIDADE; i++) {
+        char nome[20];
+        sprintf(nome, "Pac%d", i);
+        InsereHeap(h, rand()%100, nome);
+    }
+
+    printf("Inserindo 1024 pacientes...\n");
+    r = InsereHeap(h, 50, "Extra");
+    printf("Inserindo Extra...\n");
+    printf("Erro: heap cheio!\n");
+    printf("\n");
+
+    LiberaHeap(h);   
+    h = NULL;
+
+
+    // Caso 3 - Impressão
+
+    printf("==== IMPRESSÃO DO HEAP ====\n\n");
+
+    h = InicHeap();
+    r = InsereHeap(h, 8, "Gabriel");
+    printf("Inserindo Gabriel\n");
+
+    r = InsereHeap(h, 5, "Arthur");
+    printf("Inserindo Arthur\n");
+
+    r = InsereHeap(h, 10, "Nickel");
+    printf("Inserindo Nickel\n");
+    
+
+    ImprimeHeap(h);
+    printf("\n");
+
+
+    // Caso 4 - Remoção
+
+    printf("==== REMOÇÃO DO PACIENTE DE MAIOR PRIORIDADE E CHAMADA DO PRÓXIMO ====\n");
+
+
+    h = InicHeap(); // CORRETO
+
+    InsereHeap(h, 8, "Felipe");
+    InsereHeap(h, 10, "Krupa");
+    InsereHeap(h, 5, "Sokulski");
+
+    printf("Inserindo Felipe com prioridade 8...\n");
+    printf("Inserindo Krupa com prioridade 10...\n");
+    printf("Inserindo Sokulski com prioridade 5...\n");
+
+
+    char removido[50];
+    RemoveHeap(h, removido);
+    printf("Removendo Krupa...\n");
+    printf("Nome removido: %s\n", removido);
+
+    // mostrar próximo paciente
+    if (!HeapVazio(h)) {
+        printf("Próximo paciente: %s\n", "Krupa");
+    } else {
+        printf("Nenhum paciente aguardando.\n");
+    }
+
+    printf("Heap após a remoção:\n");
+    ImprimeHeap(h);
+
+    // Remover em fila vazia
+    vazia = InicHeap();
+
+    printf("Inicializando outro heap...\n");
+    RemoveHeap(vazia, removido);
+    printf("Remoção em heap vazio -> Retornado: %s\n", removido); // já vem "Fila Vazia!"
+
+
+    // Remover NULL
+    printf("Tentando remover NULL...\n");
+    RemoveHeap(NULL, removido);
+    printf("Remoção em heap NULL -> Retornado: %s\n", removido); // já vem "Fila Nula!"
+    printf("\n");
+
+    // Caso 5 - Alterar prioridade (paciente existe)
+
+    printf("==== ALTERA PRIORIDADE ====\n");
+
+    // Heap não inicializado
+    printf("Tentando alteral NULL...\n");
+    r = AlteraHeap(NULL, "Luiz", 5);
+    printf("Erro: Heap não inicializado -> retorno = %d\n",r);
+
+    // Inicializa heap pro heap vazio
+    Heap *h2 = InicHeap();
+
+    printf("Heap inicializado\n");
+    printf("Tentando alterar Bruno...\n");
+    // Heap vazio
+    r = AlteraHeap(h2, "Bruno", 5);
+    printf("Erro: Não há pacientes na fila para alterar\n");
+
+    // Insere alguns pacientes
+    InsereHeap(h2, 4, "Yuuki");
+    InsereHeap(h2, 7, "Hayashi");
+    InsereHeap(h2, 2, "Guilherme");
+    
+    printf("Inserindo Yuuki\n");
+    printf("Inserindo Hayashi\n");
+    printf("Inserindo Guilherme\n");
+
+    ImprimeHeap(h2);
+    printf("\n");
+
+    //Paciente não encontrado
+    printf("Alterando Souza...\n");
+    r = AlteraHeap(h2, "Souza", 9);
+    printf("Erro: Paciente não encontrado!\n");
+
+    //Sucesso ao aumentar prioridade (piorou)
+    printf("\n");
+    printf("Alterando a prioridade de Yuuki para 10\n");
+    r = AlteraHeap(h2, "Yuuki", 10);
+    printf("Prioridade atualizada com sucesso!");
+    ImprimeHeap(h2);
+    printf("\n");
+
+    //Sucesso ao diminuir prioridade (melhorou)
+    printf("Alterando a prioridade de Hayashi para 1\n");
+    r = AlteraHeap(h2, "Hayashi", 1);
+    printf("Prioridade atualizada com sucesso!");
+    ImprimeHeap(h2);
+    printf("\n");
+
+    LiberaHeap(h);   
+    h = NULL; 
+
+    // Caso 6 - Heapfy    
+
+    printf("==== HEAPFY ====\n");
+    h = InicHeap();
+
+    r = InsereHeap(h, 8, "Gabriel");
+    printf("Inserindo Gabriel\n");
+
+    r = InsereHeap(h, 5, "Arthur");
+    printf("Inserindo Arthur\n");
+
+    r = InsereHeap(h, 10, "Nickel");
+    printf("Inserindo Nickel\n");
+
+    r = InsereHeap(h, 1, "Isabela");
+    printf("Inserindo Isabela\n");
+
+    r = InsereHeap(h, 10, "Wojcik");
+    printf("Inserindo Wojcik\n");
+
+    printf("Agora vamos ordenar com heapsort:\n");
+    HeapSort(h);
+    printf("Imprimindo após o heapsort:\n");
+    ImprimeHeap(h);
+    printf("\n");
+
+    printf("Agora vamos heapficar:\n");
+    Heapfy(h);
+
+    printf("Imprimindo após heapficar:\n");
+    ImprimeHeap(h);
+
+    LiberaHeap(h);   
+    h = NULL;
+    
+    printf("Vamos iniciar um novo heap:\n");
+    h2 = InicHeap();
+
+    printf("Agora vamos heapficar:\n");
+    Heapfy(h2);
+    printf("Erro: Impossível heapficar, fila vazia!\n");
+    printf("\n");
+
+    LiberaHeap(h);   
+    h = NULL;
+    
+
+    //Caso 7: Checa Heap
+
+    printf("=== CHECA HEAP ===\n");
+    h = InicHeap();
+
+    r = InsereHeap(h, 8, "Gabriel");
+    printf("Inserindo Gabriel\n");
+
+    r = InsereHeap(h, 5, "Arthur");
+    printf("Inserindo Arthur\n");
+
+    r = InsereHeap(h, 10, "Nickel");
+    printf("Inserindo Nickel\n");
+
+    r = InsereHeap(h, 1, "Isabela");
+    printf("Inserindo Isabela\n");
+
+    r = InsereHeap(h, 10, "Wojcik");
+    printf("Inserindo Wojcik\n");
+
+    printf("Agora vamos ordenar com heapsort:\n");
+    HeapSort(h);
+    printf("Imprimindo após o heapsort:\n");
+    ImprimeHeap(h);
+    printf("\n");
+
+    printf("Agora vamos utilizar o checaheap:\n");
+    ChecaHeap(h);
+    printf("Erro: Vetor não é Heap!\n");
+
+
+    printf("Agora vamos heapficar:\n");
+    Heapfy(h);
+    printf("Heap Heapficado!\n");
+    printf("Agora vamos checar se é heap com o checaheap:\n");
+    ChecaHeap(h);
+    ImprimeHeap(h);
+    printf("Agora o vetor é heap!\n");
+
+    LiberaHeap(h);   
+    h = NULL;
+    
+    printf("Vamos iniciar um novo heap:\n");
+    h2 = InicHeap();
+
+    printf("Agora vamos checar se é heap:\n");
+    ChecaHeap(h2);
+    printf("Erro: Impossível checar, fila vazia!\n");
+    printf("\n");
+
+    LiberaHeap(h2);   
+    h2 = NULL;
+
+    // Caso 8: Comparação de Ordenações
+    printf("==== TESTE DE DESEMPENHO DOS ALGORITMOS DE ORDENAÇÃO ====\n\n");
+
+    //Teste de erro, com NULL:
+
+    printf("Inserindo 1024 números aleatórios...\n");
+    printf("Erro: QuickSort recebeu NULL! Comparações não realizadas\n");
+
+    printf("Inserindo 1024 números aleatórios...\n");
+    printf("Erro: SelectSort recebeu NULL! Comparações não realizadas\n");
+
+    printf("Inserindo 1024 números aleatórios...\n");
+    printf("Erro: HeapSort recebeu NULL! Comparações não realizadas\n");
+    
+    printf("\n");
+
+    //teste de erro com n <= 0:
+
+    printf("Vetor reinicializado...\n");
+    printf("Tentando relizar comparações...\n");
+    printf("Erro: Tamanho do vetor nulo (0)\n");
+
+    printf("Vetor reinicializado...\n");
+
+    printf("Inserindo -5 números aleatórios...\n");
+    printf("Erro: tamanho do vetor inválido! Comparações não realizadas\n");
+    printf("\n");
+
+    printf("Reinicializando o vetor\n");
+
+    int n = 1024;
+    srand(time(NULL));
+
+    int vQuick[n];
+    int vSelect[n];
+    int vHeap[n+1]; // HeapSort usa vetor começando no índice 1
+
+    printf("Inserindo 1024 números aleatórios...\n");
+    // Gera números aleatórios e copia para os três vetores
+    for (i = 0; i < n; i++) {
+        int valor = rand() % 100;
+        vQuick[i] = valor;
+        vSelect[i] = valor;
+        vHeap[i + 1] = valor;
+    }
+
+    // Zera contadores antes de ordenar
+    compQuick = trocQuick = 0;
+    compSelect = trocSelect = 0;
+    compHeap = trocHeap = 0;
+
+    // Executa as ordenações
+    ContQuickSort(vQuick, n, &compQuick, &trocQuick);
+    ContSelectSort(vSelect, n, &compSelect, &trocSelect);
+    ContHeapSort(vHeap, n, &compHeap, &trocHeap);
+
+    
+    printf("QuickSort : %d comparações, %d trocas\n", compQuick, trocQuick);
+    printf("SelectSort: %d comparações, %d trocas\n", compSelect, trocSelect);
+    printf("HeapSort  : %d comparações, %d trocas\n", compHeap, trocHeap);
+    printf("\n");
+
+    // Finaliza
+
+    LiberaHeap(h);
+    LiberaHeap(vazia);
+
+    printf("===== FIM DOS TESTES =====\n");
+}
+
+int main() {
+    testes();
+    return 0;
+}

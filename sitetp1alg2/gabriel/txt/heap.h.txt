@@ -1,0 +1,86 @@
+/*Protótipo das funções do Tipo Abstrato de Dados Heap*/
+
+#ifndef Heap_H
+#define Heap_H
+
+#define CAPACIDADE 1024
+#define TAM_NOME 50
+
+typedef struct heap Heap;
+typedef struct paciente Paciente;
+
+/*Verifica se o heap está vazio.
+ *Retorna 1 se estiver vazio;
+ *Retorna 0 se não estiver vazio.
+ **/
+int HeapVazio(Heap *h);
+
+/*Retorna o tamanho do heap ou -1 se a fila for nula
+ **/
+int TamHeap(Heap *h);
+
+/*Inicializa estrutura de dados heap.
+ *Retorna endereço para ela ou NULL em caso de erro
+ **/
+Heap *InicHeap();
+
+/*Insere o paciente, com prioridade e nome, dentro do heap,
+ *na posição de acordo com sua prioridade.
+ *Retorna 1 se conseguiu inserir;
+ *Retorna 0 se o heap estiver cheio ou for nulo;
+ *Retorna -1 se o nome for inválido (Maior que 50 caracteres ou nulo) ou repetido;
+ **/
+int InsereHeap(Heap *h, int prioridade, const char *nome);
+
+/*Retorna no parâmetro recebido o nome do paciente com maior prioridade e o remove do heap.
+ *Se a fila estiver vazia, retorna nome "Fila Vazia!"
+ *Se a fila for nula, retorna nome "Fila Nula!"
+ **/
+void RemoveHeap(Heap *h, char *NomeRemovido);
+
+/*Transforma a estrutura de dados em um heap.
+ *Retorna -1 se a fila for nula;
+ *Retorna 0 se fila estiver vazia;
+ *Retorna 1 se conseguiu heapficar.
+ **/
+int Heapfy(Heap *h);
+
+/*Verifica se a estrutura de dados é um heap.
+ *Retorna -1 se a fila for nula ou vazia;
+ *Retorna 0 se não for e 1 se for heap.
+ **/
+int ChecaHeap(Heap *h);
+
+/*Imprime o heap, com cada paciente sendo impresso
+ *da seguinte forma: "('prioridade') ('nome')";
+ *ou avisa fila vazia ou nula*/
+void ImprimeHeap(Heap *h);
+
+/*Ordena, crescentemente, um heap.
+ *Retorna -1 se a fila for nula;
+ *Retorna 0 se fila estiver vazia;
+ *Retorna 1 se conseguiu ordenar.
+ **/
+int HeapSort(Heap *h);
+
+/*Atualiza a prioridade de algum paciente com nova prioridade enviada:
+ *Retorna -1 se a fila for nula;
+ *Retorna 0 se paciente não for encontrado, considerando que a fila pode estar vazia;
+ *Retorna 1 se conseguiu alterar a prioridade;
+ *InsereHeap garante que não há nomes repetidos na fila.
+ **/
+int AlteraHeap(Heap *h, const char *nome, int prioridade);
+
+/*Coloca um paciente que está fora de ordem na primeira posição
+ *na sua posição certa no heap.
+ *Retorna 0 se fila estiver vazia;
+ *Retorna 1 se conseguiu sacodir.
+ **/
+void SacodeHeap(Heap *h, int tam);
+
+/*Libera a memória alocada para o heap.
+ *Retorna NULL de qualquer forma, após liberar ou se já estava liberado.
+ **/
+void *LiberaHeap(Heap *h);
+
+#endif

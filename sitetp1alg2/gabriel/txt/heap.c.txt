@@ -1,0 +1,258 @@
+/*Implementação do Tipo Abstrato de Dados Heap*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "heap.h"
+
+/*---Implementação das estruturas de paciente e heap---*/
+struct paciente
+{
+	char nome[TAM_NOME];
+	int prioridade;
+};
+
+struct heap
+{
+	struct paciente fila[CAPACIDADE + 1]; /*índice 0 não utilizado*/
+	int tam;
+};
+/*-----------------------------------------------------*/
+
+
+void Troca(struct paciente *a, struct paciente *b)
+{
+	struct paciente aux = *a;
+	*a = *b;
+	*b = aux;
+}
+
+
+int HeapVazio(Heap *h)
+{
+	if (h->tam == 0)
+		return 1;
+	return 0;
+}
+
+
+int TamHeap(Heap *h)
+{
+	if (h == NULL)
+		return -1;
+
+	return h->tam;
+}
+
+
+Heap *InicHeap()
+{
+	/*aloca dinamicamente o heap*/
+	struct heap *h;
+	if (!(h = malloc(sizeof(struct heap))))
+		return NULL;
+
+	h->tam = 0;
+
+	return h;
+}
+
+
+int InsereHeap(Heap *h, int prioridade, const char *nome)
+{
+	int i;
+
+	/*--------Verificações iniciais-------*/
+	if (h == NULL || h->tam >= CAPACIDADE)
+		return 0;
+
+	/*Verifica se nome já existe na fila*/
+	for (i = 1; i <= h->tam; i++)
+		if (strcmp(h->fila[i].nome, nome) == 0)
+			return -1;
+
+	if (strlen(nome) >= TAM_NOME || strlen(nome) == 0)
+		return -1;
+	/*------------------------------------*/
+	
+	h->tam++;
+
+	i = h->tam;
+
+	/*Atribui valores ao novo paciente*/
+	h->fila[i].prioridade = prioridade;
+	strcpy(h->fila[i].nome, nome);
+	
+	/*Sobe o paciente até a posição correta*/
+	while (i > 1 && h->fila[i/2].prioridade < h->fila[i].prioridade) 
+	{
+		Troca(&(h->fila[i/2]), &(h->fila[i]));
+		i = i/2;
+	}
+
+	return 1;
+}
+
+
+void RemoveHeap(Heap *h, char *NomeRemovido)
+{
+	/*--------Verificações iniciais-------*/
+	if (h == NULL)
+	{
+		strcpy(NomeRemovido, "Fila Nula!"); /*retorna o código de erro no parâmetro recebido*/
+		return;
+	}
+
+	if (HeapVazio(h))
+	{
+		strcpy(NomeRemovido, "Fila Vazia!");
+		return;
+	}
+
+	strcpy(NomeRemovido, h->fila[1].nome);
+	/*------------------------------------*/
+	h->fila[1] = h->fila[h->tam]; /*Coloca o último paciente no início*/
+	
+	h->tam--;
+	
+	SacodeHeap(h, h->tam); /*Acerta a posição do primeiro paciente, sacodindo*/
+}
+
+
+int Heapfy(Heap *h)
+{
+	int i, guarda_tam;
+
+	/*--------Verificações iniciais-------*/
+	if (h == NULL)
+		return -1;
+
+	if (HeapVazio(h))
+		return 0;
+	/*------------------------------------*/
+	guarda_tam = h->tam; /*Guarda o tamanho original da fila, para saber onde parar de "inserir"*/
+	
+	h->tam = 1;
+
+	/*laço que seleciona o da vez que será inserido*/
+	for (i = 2; i <= guarda_tam; i++) 
+		InsereHeap(h, h->fila[i].prioridade, h->fila[i].nome);
+
+	return 1;
+}
+
+
+int ChecaHeap(Heap *h)
+{
+	int i;
+
+	if (h == NULL || HeapVazio(h))
+		return -1;
+
+	/*Verifica pacientes um a um se estão de acordo com a prioridade*/
+	for (i = h->tam; i > 1; i--)
+		if (h->fila[i/2].prioridade < h->fila[i].prioridade)
+			return 0;
+	
+	return 1;
+}
+
+
+void ImprimeHeap(Heap *h)
+{
+	int i;
+
+	printf("\nImprimindo fila de pacientes...\n\n");
+
+	/*-----Verificação de casos especiais----*/
+	if (h == NULL)
+	{
+		printf("Fila Nula!\n\n");
+		return;
+	}
+
+	if (HeapVazio(h))
+	{
+		printf("Fila vazia!\n\n");
+		return;
+	}
+	/*--------------------------------------*/
+	printf("Fila de espera:\n\n");
+
+	for (i = 1; i <= h->tam-1; i++)
+		printf("(%d - %s)\n", h->fila[i].prioridade, h->fila[i].nome);
+	printf("(%d - %s)\n\n", h->fila[h->tam].prioridade, h->fila[h->tam].nome); /* Imprime o último paciente com 2 new line*/
+}
+
+
+int HeapSort(Heap *h)
+{
+	int i, status;
+	
+	status = Heapfy(h);
+
+	/*--------Verificações iniciais-------*/
+	if (status == -1) /*Fila nula*/
+		return -1;
+
+	if (status == 0) /*Fila vazia*/
+		return 0;
+	/*------------------------------------*/
+	
+	/*Troca primeiro com último paciente e sacode*/
+	for (i = h->tam; i > 1; i--)
+	{
+		Troca(&(h->fila[1]), &(h->fila[i]));
+		SacodeHeap(h, i - 1);
+	}
+
+	return 1;
+}
+
+
+int AlteraHeap(Heap *h, const char *nome, int prioridade)
+{
+	int i = 1;
+
+	if (h == NULL)
+		return -1;
+
+	/*Procura o paciente na fila*/
+	while (i <= h->tam && strcmp(h->fila[i].nome, nome) != 0) i++;
+
+	if (i > h->tam) /*Paciente não encontrado ou fila vazia*/
+		return 0;
+
+	/*Altera a prioridade do paciente e heapfica o vetor, acertando a nova posição dele*/
+	h->fila[i].prioridade = prioridade;
+	Heapfy(h);
+
+	return 1;
+}
+
+
+void SacodeHeap(Heap *h, int tam)
+{
+	int i = 2;
+	
+	while (i <= tam)
+	{
+		if (i < tam && h->fila[i+1].prioridade > h->fila[i].prioridade) i++;
+		
+		if (h->fila[i/2].prioridade >= h->fila[i].prioridade) break;
+		
+		Troca(&(h->fila[i]), &(h->fila[i/2]));
+		
+		i = i*2;
+	}
+}
+
+
+void *LiberaHeap(Heap *h)
+{
+	if (h == NULL) /*Evitar doubles free's*/
+		return NULL;
+
+	free(h);
+	return NULL;
+}

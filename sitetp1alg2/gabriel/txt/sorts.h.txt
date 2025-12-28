@@ -1,0 +1,27 @@
+// sorts.h
+#ifndef SORTS_H
+#define SORTS_H
+
+#define TAM 1024
+
+/*Quick Sort*/
+void ContQuickSort(int v[], int n, int *compQuick, int *trocQuick);
+
+/*Select Sort*/
+void ContSelectSort(int v[], int n, int *compSelect, int *trocSelect );
+
+/*Heap Sort*/
+void ContHeapSort(int v[], int n, int *compHeap, int *trocHeap);
+
+/* Funções auxiliares de vetor*/
+int* CriaVetor(int n);
+void PreencheAleatorio(int *v, int n);
+void ImprimeVetor(int *v, int n);
+void LiberaVetor(int *v);
+
+/* Contadores (variáveis globais definidas em sorts.c) */
+extern int compQuick, trocQuick;
+extern int compSelect, trocSelect;
+extern int compHeap, trocHeap;
+
+#endif
